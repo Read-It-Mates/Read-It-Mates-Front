@@ -1,34 +1,86 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 리딧메이츠 (Read-It Mates)
 
-## Getting Started
+리딧메이츠는 도서추천 커뮤니티이자 독서문화를 활성화하고자 다양한 독서활동을 제공하는 플랫폼입니다.
 
-First, run the development server:
+## 목차
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- [프로젝트 설명](#프로젝트-설명)
+- [개발 스택](#개발-스택)
+- [기능 설명](#기능-설명)
+- [마이 페이지](#마이-페이지)
+- [리딩 룸](#리딩-룸)
+- [참여방법](#참여방법)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 프로젝트 설명
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+리딧메이츠는 다음과 같은 기술을 사용하여 개발되었습니다.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- 프로그래밍 언어: JavaScript, TypeScript, Java
+- 프레임워크: Spring, Next.js
+- 서버: Node.js, AWS
+- 데이터베이스: MySQL, MongoDB
+- 개발 환경: Visual Studio Code
 
-## Learn More
+## 개발 스택
 
-To learn more about Next.js, take a look at the following resources:
+### 프론트엔드
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js
+- React
+- JavaScript
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 백엔드
 
-## Deploy on Vercel
+- Spring
+- Java
+- Node.js
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 데이터베이스
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- MySQL
+- MongoDB
+
+### 인프라
+
+- AWS EC2
+- AWS RDS
+- AWS S3
+
+## 주요 기능
+
+1. 알라딘 도서 크롤링 및 데이터 활용
+2. 회원가입 및 로그인 (JWT 토큰 방식 사용)
+3. 메인화면: 국내도서, 외국도서, 로그인, 회원가입, 마이페이지
+4. 도서 검색 (통합 검색, 제목 검색, 저자 검색)
+5. 베스트셀러, 스테디 셀러, 신간베스트, 리딧메이츠 추천 도서 구분 및 추천
+6. 책 정보 크롤링 (책과 지은이 이름, 책 이미지, 책 소개, 목차 등)
+7. 국내/외국도서 구분 및 30여개 분야 분류
+8. 외국도서 종류: 영미도서, 일본 도서
+
+## 마이 페이지
+
+1. 닉네임 변경 및 비밀번호 변경 기능
+2. 내가 쓴 리뷰, 내가 추천한 도서, 내가 스크랩한 도서, 내가 속한 리딩룸 조회
+
+## 리딩 룸
+
+1. 방 개설 및 커뮤니티 참여 기능
+2. 방장의 역할 설정: 방 제목 설정, 책 제목 설정, 강퇴 기능 등
+3. 채팅 이력 관리 및 시간 표시 기능
+4. 참가자 목록 확인 및 온/오프라인 구분
+5. 귓속말/차단 기능 및 방장 위임
+
+## 이벤트성
+
+1. 독서왕 이벤트 시스템
+
+## Ai 도서추천
+
+1. GPT-4를 이용한 도서 추천 기능
+
+## 참여방법
+
+1. 이 프로젝트를 Fork하셔서 로컬로 클론합니다.
+2. 해당 프로젝트에 필요한 node_modules를 설치합니다.
+3. 프로젝트 요구사항 및 개선 사항을 확인하고 개발에 참여하세요!
+4. 새로운 기능 또는 수정된 항목이 있다면 Pull Request를 생성하시고 제출해 주세요!
