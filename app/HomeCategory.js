@@ -5,38 +5,6 @@ export default function HomeCategory({ data }) {
   const coverImageRefs = useRef(data.map(() => React.createRef()));
   const [hoverIndex, setHoverIndex] = useState(-1);
 
-  //   useEffect(() => {
-  //     function handleMouseEnter(index) {
-  //       setHoverIndex(index);
-  //     }
-
-  //     function handleMouseLeave() {
-  //       setHoverIndex(-1);
-  //     }
-
-  //     coverImageRefs.current.forEach((ref, index) => {
-  //       if (ref.current) {
-  //         ref.current.addEventListener("mouseenter", () =>
-  //           handleMouseEnter(index)
-  //         );
-  //         ref.current.addEventListener("mouseleave", handleMouseLeave);
-  //       }
-  //     });
-
-  //     return () => {
-  //       coverImageRefs.current.forEach((ref, index) => {
-  //         if (ref.current) {
-  //           ref.current.addEventListener("mouseenter", () =>
-  //             handleMouseEnter(index)
-  //           );
-  //           ref.current.removeEventListener("mouseleave", handleMouseLeave);
-  //         }
-  //       });
-  //     };
-  //   }, []);
-
-  // ...
-
   return (
     <div>
       <div className="row-container">
@@ -57,13 +25,11 @@ export default function HomeCategory({ data }) {
                 ></img>
                 {index === hoverIndex && (
                   <div className="hover-container" style={{ borderRadius: 20 }}>
-                    {item.title}
-                    <br></br>- {item.author} -<p></p>
-                    <img
-                      className="coverImage2"
-                      src={item.backImageUrl}
-                      alt=""
-                    ></img>
+                    <div className="hover-title">{item.title}</div>
+                    <div className="hover-author" style={{ borderRadius: 20 }}>
+                      {" "}
+                      - {item.author} -
+                    </div>
                   </div>
                 )}
               </div>

@@ -104,15 +104,10 @@ export default async function Home() {
   //         const author = $(element)
   //           .find(".ss_book_list ul li:eq(2) > a:eq(0)")
   //           .text();
-  //        // 링크 추출
-  //   let link = $(element)
-  //   .find(".ss_book_list ul li:eq(1) > a:eq(0)")
-  //   .attr("href");
-  // if (link.includes("Search")) {
-  //   link = $(element)
-  //     .find(".ss_book_list ul li:eq(0) > a:eq(0)")
-  //     .attr("href");
-  // }
+  //         // 링크 추출
+  //         let link = $(element)
+  //           .find(".ss_book_list ul li:eq(1) > a:eq(0)")
+  //           .attr("href");
   //         // 이미지 추출
   //         let imageUrl = $(element).find(".front_cover").attr("src");
   //         // 추출한 정보를 배열에 추가
@@ -163,15 +158,10 @@ export default async function Home() {
   //         const author = $(element)
   //           .find(".ss_book_list ul li:eq(2) > a:eq(0)")
   //           .text();
-  //        // 링크 추출
-  //   let link = $(element)
-  //   .find(".ss_book_list ul li:eq(1) > a:eq(0)")
-  //   .attr("href");
-  // if (link.includes("Search")) {
-  //   link = $(element)
-  //     .find(".ss_book_list ul li:eq(0) > a:eq(0)")
-  //     .attr("href");
-  // }
+  //         // 링크 추출
+  //         let link = $(element)
+  //           .find(".ss_book_list ul li:eq(1) > a:eq(0)")
+  //           .attr("href");
   //         // 이미지 추출
   //         let imageUrl = $(element).find(".front_cover.i_cover").attr("src");
   //         // 추출한 정보를 배열에 추가
@@ -222,15 +212,10 @@ export default async function Home() {
   //         const author = $(element)
   //           .find(".ss_book_list ul li:eq(2) > a:eq(0)")
   //           .text();
-  //        // 링크 추출
-  //   let link = $(element)
-  //   .find(".ss_book_list ul li:eq(1) > a:eq(0)")
-  //   .attr("href");
-  // if (link.includes("Search")) {
-  //   link = $(element)
-  //     .find(".ss_book_list ul li:eq(0) > a:eq(0)")
-  //     .attr("href");
-  // }
+  //         // 링크 추출
+  //         let link = $(element)
+  //           .find(".ss_book_list ul li:eq(1) > a:eq(0)")
+  //           .attr("href");
   //         // 이미지 추출
   //         let imageUrl = $(element).find(".front_cover.i_cover").attr("src");
   //         // 추출한 정보를 배열에 추가
@@ -315,48 +300,47 @@ export default async function Home() {
   //       // console.error("크롤링 도중 에러 발생:", error);
   //     });
   // }
-
-  // // --------------------------------------상세정보-----------------------------------------
   const db = (await connectDB).db("books");
   let result = await db.collection("bestSellers").find().toArray();
-  console.log(result);
-  for (let i; i < 50; i++) {
-    // axios HTTP 요청
-    await axios
-      .get(result[i].link)
-      .then((response) => {
-        // 요청 결과 상태가 정상일 경우
-        if (response.status === 200) {
-          // HTML 데이터 변수
-          const html = response.data;
-          // cheerio를 사용하여 HTML 데이터를 분석 및 추출하기 쉽도록 처리
-          const $ = cheerio.load(html);
-
-          // 이미지 추출
-          let backImageUrl = $(".cover").find(".c_back > img").attr("src");
-          console.log(backImageUrl);
-          // 추출한 정보를 배열에 추가
-          bestSellers.push({
-            backImageUrl,
-          });
-        }
-      })
-      .then(async () => {
-        try {
-          // 베스트셀러 정보 배열 전체를 서버에 전달
-          await axios.post("http://localhost:3000/api/post/bestSellers", {
-            books: bestSellers,
-          });
-        } catch (error) {
-          console.error("데이터 전송 중 오류 발생:", error);
-        }
-      })
-
-      // 에러 처리: 크롤링 도중 에러가 발생한 경우
-      .catch((error) => {
-        console.error("크롤링 도중 에러 발생:", error);
-      });
-  }
-
-  return <HomeCategory data={result} />;
+  return (
+    <div>
+      <div className="category-container">
+        <div className="category-title">국내도서</div>
+        <div className="button-container">
+          <button className="category-button">종합</button>
+          <button className="category-button">건강/취미</button>
+          <button className="category-button">경제경영</button>
+          <button className="category-button">고전</button>
+          <button className="category-button">과학</button>
+          <button className="category-button">대학교재/전문서적</button>
+          <button className="category-button">만화</button>
+          <button className="category-button">달력/기타</button>
+          <button className="category-button">사회과학</button>
+          <button className="category-button">소설/시/희곡</button>
+          <button className="category-button">수험서/자격증</button>
+          <button className="category-button">어린이</button>
+          <button className="category-button">에세이</button>
+          <button className="category-button">여행</button>
+          <button className="category-button">역사</button>
+          <button className="category-button">예술/대중문화</button>
+          <button className="category-button">요리/살림</button>
+          <button className="category-button">외국어</button>
+          <button className="category-button">유아</button>
+          <button className="category-button">인문학</button>
+          <button className="category-button">자기계발</button>
+          <button className="category-button">장르소설</button>
+          <button className="category-button">잡지</button>
+          <button className="category-button">전집/중고전집</button>
+          <button className="category-button">종교/역학</button>
+          <button className="category-button">좋은부모</button>
+          <button className="category-button">청소년</button>
+          <button className="category-button">컴퓨터/모바일</button>
+          <button className="category-button">초등학교참고서</button>
+          <button className="category-button">중학교참고서</button>
+          <button className="category-button">고등학교참고서</button>
+        </div>
+      </div>
+      <HomeCategory data={result} />
+    </div>
+  );
 }
