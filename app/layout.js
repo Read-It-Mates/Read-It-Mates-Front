@@ -1,6 +1,9 @@
+"use client";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { RiLoginBoxLine } from "react-icons/ri";
+import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,19 +13,44 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  useEffect(() => {
+    const searchInput = document.querySelector(".search-input");
+
+    function handleFocus() {
+      const audio = new Audio("/search.mp3");
+      audio.play();
+    }
+
+    searchInput.addEventListener("focus", handleFocus);
+
+    return () => {
+      searchInput.removeEventListener("focus", handleFocus);
+    };
+  }, []);
   return (
     <html lang="en">
       <body>
-        <div className="navbar">
-          <Link href="/">
-            <img src="/logo3.png" className="logo"></img>
-          </Link>
-          <Link href="/list">베스트셀러</Link>
-          <Link href="/list">스테디셀러</Link>
-          <Link href="/list">리딧베스트</Link>
-          <Link href="/list">리딩룸</Link>
-          <Link href="/list">로그인</Link>
-          <Link href="/list">회원가입</Link>
+        <div
+          className="navbar"
+          style={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
+        >
+          <div className="navbar-l">
+            <Link href="/">
+              <img src="/logo3.png" className="logo"></img>
+            </Link>
+            <input className="search-input" type="text" placeholder="검색" />
+          </div>
+          <div>
+            <img src="/navbar.png" className="navbar-icon"></img>
+          </div>
+          <div className="navbar-r">
+            <Link href="/list">
+              <RiLoginBoxLine />
+              sign in
+            </Link>
+            <Link href="/list">mypage</Link>
+            <button>seok</button>
+          </div>
         </div>
         {children}
         <div className="footer">© 2023 Read-It Mates.</div>
