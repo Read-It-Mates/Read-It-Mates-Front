@@ -19,7 +19,7 @@
 }
 
 .coverImage {
-  width: 100%;
+  width: 110%;
   height: auto;
   object-fit: cover;
   border-radius: 8px;
@@ -91,10 +91,18 @@ body {
 
 .row-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 가로에 4개의 책을 배치합니다. */
-  grid-template-rows: 2;
-  width: max-content;
-  margin-left: 40px;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.main-container {
+  flex-direction: row;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 /* 스크롤바 전체 스타일 */
@@ -122,7 +130,7 @@ body {
 }
 
 .coverImage {
-  width: 110%;
+  width: 100%;
   height: auto;
   object-fit: cover;
   border-radius: 8px;
@@ -149,7 +157,9 @@ body {
 .image-container {
   margin-top: 20px;
   margin-bottom: -100px;
-  align-self: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .category-container {
@@ -198,43 +208,68 @@ body {
 
 .hover-container {
   position: absolute;
-  top: 35%;
-  right: 5%;
-  width: 800px;
-  height: 700px;
+  top: 0%;
+  left: 80%;
+  width: 200px;
+  height: 200px;
   background: #332f2e;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5); /* 이미지에 그림자 효과를 추가합니다. */
   color: #fff;
   font-weight: bold;
-  justify-content: center;
+  z-index: 1;
   display: flex;
+  flex-direction: column;
+  border-radius: 10px;
 }
 
 .image-container:hover .hover-container {
   opacity: 1;
-  z-index: -1;
+}
+
+.hover-index {
+  font-size: 14px;
+  margin: 4px;
+  justify-content: space-between;
+  display: flex;
+  flex: 0.1;
 }
 
 .hover-title {
-  font-size: 24px;
+  font-size: 14px;
   align-self: center;
-  margin: 8px;
+  margin: 4px;
+  display: flex;
+  flex: 0.7;
 }
 
-.hover-container {
-  display: flex;
-  justify-content: start;
-  flex-direction: column;
-}
 .hover-author {
-  background: green;
+  font-size: 12px;
+  display: flex;
   align-self: flex-end;
-  padding: 6px;
-  border-radius: 20;
+  border-radius: 10px;
   margin: 4px;
   font-weight: bold;
+  flex: 0.1;
+  color: chocolate;
+}
+
+.hover-jenre {
+  font-size: 14px;
+  margin: 4px;
+  display: flex;
+}
+
+.hover-online {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  justify-content: space-between;
+  flex: 0.1;
+  margin: 4px;
+}
+.hover-btn {
 }
 
 .main-category-container {
@@ -306,18 +341,23 @@ body {
 }
 
 .navbar1-icon:hover {
-  background: red;
   animation: scalion 1s linear;
+  background-image: url("/KR.png");
+  background-position: center;
+  background-size: cover;
 }
 
 .navbar2-icon:hover {
-  background: blue;
   animation: scalion2 1s linear;
+  background-position: center;
+  background-size: cover;
 }
 
 .navbar3-icon:hover {
-  background: green;
   animation: scalion 1s linear;
+  background-image: url("/JP.png");
+  background-position: center;
+  background-size: cover;
 }
 
 .navbar-icon-container:hover {

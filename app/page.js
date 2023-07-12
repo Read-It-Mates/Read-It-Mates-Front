@@ -302,10 +302,31 @@ export default async function Home() {
   // }
   const db = (await connectDB).db("books");
   let result = await db.collection("bestSellers").find().toArray();
+  result = result.slice().sort(() => Math.random() - 0.5);
+
   return (
     <div>
+      <div style={{ height: 150 }}></div>
       <div className="category-title">베스트셀러</div>
-      <Category_image data={result} />
+      <div className="main-container">
+        <Category_image data={result} />
+        <Category_image data={result} />
+        <Category_image data={result} />
+      </div>
+      <div className="category-title">스테디셀러</div>
+      <div className="main-container">
+        <Category_image data={result} />
+        <Category_image data={result} />
+      </div>
+      <div className="category-title">신간베스트</div>
+      <div className="main-container">
+        <Category_image data={result} />
+        <Category_image data={result} />
+      </div>
+      <div className="category-title">리딧베스트</div>
+      <div className="main-container">
+        <Category_image data={result} />
+      </div>
     </div>
   );
 }

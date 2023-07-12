@@ -27,6 +27,24 @@ export default function RootLayout({ children }) {
       searchInput.removeEventListener("focus", handleFocus);
     };
   }, []);
+
+  const changeBackground = (event) => {
+    // 랜덤하게 0 또는 1이 선택되도록 설정합니다.
+    const randomIndex = Math.floor(Math.random() * 2);
+    const images = ["/UK.png", "/US.png"];
+
+    // 선택한 이미지 URL을 사용하여 이미지 경로를 업데이트합니다.
+    const selectedImage = images[randomIndex];
+
+    const element = event.target;
+    element.style.backgroundImage = `url(${selectedImage})`;
+  };
+
+  const removeBackground = (event) => {
+    const element = event.target;
+    element.style.backgroundImage = "none";
+  };
+
   return (
     <html lang="en">
       <body>
@@ -46,7 +64,12 @@ export default function RootLayout({ children }) {
                 <img src="/navbar1.png" className="navbar1-icon"></img>
               </Link>
               <Link href="/steadySellers">
-                <img src="/navbar2.png" className="navbar2-icon"></img>
+                <img
+                  src="/navbar2.png"
+                  className="navbar2-icon"
+                  onMouseOver={changeBackground}
+                  onMouseLeave={removeBackground}
+                ></img>
               </Link>
               <Link href="/">
                 <img src="/navbar3.png" className="navbar3-icon"></img>

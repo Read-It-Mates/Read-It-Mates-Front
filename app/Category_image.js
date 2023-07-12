@@ -9,7 +9,7 @@ export default function Category_image({ data }) {
     <div>
       <div className="row-container">
         {data.map((item, index) => {
-          if (index < 8) {
+          if (index < 4) {
             return (
               <div
                 className="image-container"
@@ -24,11 +24,16 @@ export default function Category_image({ data }) {
                   alt=""
                 ></img>
                 {index === hoverIndex && (
-                  <div className="hover-container" style={{ borderRadius: 20 }}>
-                    <div className="hover-title">{item.title}</div>
-                    <div className="hover-author" style={{ borderRadius: 20 }}>
-                      {" "}
-                      - {item.author} -
+                  <div className="hover-container">
+                    <div className="hover-index">
+                      <div className="hover-jenre">과학</div>
+                      {item.index + "위"}
+                    </div>
+                    <div className="hover-title">{"<" + item.title + ">"}</div>
+                    <div className="hover-author">{item.author}</div>
+                    <div className="hover-online">
+                      접속자: 3명
+                      <button className="hover-btn">참여하기</button>
                     </div>
                   </div>
                 )}
@@ -38,7 +43,7 @@ export default function Category_image({ data }) {
         })}
       </div>
       <br></br>
-      <div style={{ height: 1000 }}></div>
+      <div style={{ height: 150 }}></div>
     </div>
   );
 }
