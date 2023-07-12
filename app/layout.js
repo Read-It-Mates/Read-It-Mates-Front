@@ -40,15 +40,30 @@ export default function RootLayout({ children }) {
             </Link>
             <input className="search-input" type="text" placeholder="검색" />
           </div>
-          <div>
-            <img src="/navbar.png" className="navbar-icon"></img>
+          <div className="navbar-container">
+            <div className="navbar-icon-container">
+              <Link href="/bestSellers">
+                <img src="/navbar1.png" className="navbar1-icon"></img>
+              </Link>
+              <Link href="/steadySellers">
+                <img src="/navbar2.png" className="navbar2-icon"></img>
+              </Link>
+              <Link href="/">
+                <img src="/navbar3.png" className="navbar3-icon"></img>
+              </Link>
+            </div>
+            <div className="navbar-title-container">
+              <h4>국내도서</h4>
+              <h4>영미도서</h4>
+              <h4>일본도서</h4>
+            </div>
           </div>
           <div className="navbar-r">
-            <Link href="/list">
+            <Link href="/">
               <RiLoginBoxLine />
               sign in
             </Link>
-            <Link href="/list">mypage</Link>
+            <Link href="/">mypage</Link>
             <button>seok</button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 
-export default function HomeCategory({ data }) {
+export default function Category_image({ data }) {
   const coverImageRefs = useRef(data.map(() => React.createRef()));
   const [hoverIndex, setHoverIndex] = useState(-1);
 

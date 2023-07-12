@@ -1,5 +1,5 @@
 import { connectDB } from "/util/database";
-import HomeCategory from "./HomeCategory";
+import Category_image from "./Category_image";
 
 export default async function Home() {
   // 필요한 라이브러리 가져오기
@@ -304,43 +304,8 @@ export default async function Home() {
   let result = await db.collection("bestSellers").find().toArray();
   return (
     <div>
-      <div className="category-container">
-        <div className="category-title">국내도서</div>
-        <div className="button-container">
-          <button className="category-button">종합</button>
-          <button className="category-button">건강/취미</button>
-          <button className="category-button">경제경영</button>
-          <button className="category-button">고전</button>
-          <button className="category-button">과학</button>
-          <button className="category-button">대학교재/전문서적</button>
-          <button className="category-button">만화</button>
-          <button className="category-button">달력/기타</button>
-          <button className="category-button">사회과학</button>
-          <button className="category-button">소설/시/희곡</button>
-          <button className="category-button">수험서/자격증</button>
-          <button className="category-button">어린이</button>
-          <button className="category-button">에세이</button>
-          <button className="category-button">여행</button>
-          <button className="category-button">역사</button>
-          <button className="category-button">예술/대중문화</button>
-          <button className="category-button">요리/살림</button>
-          <button className="category-button">외국어</button>
-          <button className="category-button">유아</button>
-          <button className="category-button">인문학</button>
-          <button className="category-button">자기계발</button>
-          <button className="category-button">장르소설</button>
-          <button className="category-button">잡지</button>
-          <button className="category-button">전집/중고전집</button>
-          <button className="category-button">종교/역학</button>
-          <button className="category-button">좋은부모</button>
-          <button className="category-button">청소년</button>
-          <button className="category-button">컴퓨터/모바일</button>
-          <button className="category-button">초등학교참고서</button>
-          <button className="category-button">중학교참고서</button>
-          <button className="category-button">고등학교참고서</button>
-        </div>
-      </div>
-      <HomeCategory data={result} />
+      <div className="category-title">베스트셀러</div>
+      <Category_image data={result} />
     </div>
   );
 }
