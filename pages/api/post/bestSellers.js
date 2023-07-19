@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const bestCollection = db.collection("bestSellers");
 
     // 변경된 베스트셀러를 추적하기 위한 플래그
-    let isBestSellerUpdated = true;
+    let isBestSellerUpdated = false;
 
     for (const book of booksArray) {
       const result = await bestCollection.findOneAndUpdate(

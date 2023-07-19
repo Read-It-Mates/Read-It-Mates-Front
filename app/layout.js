@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { RiLoginBoxLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
 import { useEffect } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -56,7 +57,11 @@ export default function RootLayout({ children }) {
             <Link href="/">
               <img src="/logo3.png" className="logo"></img>
             </Link>
-            <input className="search-input" type="text" placeholder="검색" />
+            <input
+              className="search-input"
+              type="text"
+              placeholder="도서검색"
+            />
           </div>
           <div className="navbar-container">
             <div className="navbar-icon-container">
@@ -82,11 +87,14 @@ export default function RootLayout({ children }) {
             </div>
           </div>
           <div className="navbar-r">
-            <Link href="/">
+            <Link href="/" className="r-link">
               <RiLoginBoxLine />
               sign in
             </Link>
-            <Link href="/">mypage</Link>
+            <Link href="/" className="r-link">
+              <CgProfile />
+              mypage
+            </Link>
             <button>seok</button>
           </div>
         </div>

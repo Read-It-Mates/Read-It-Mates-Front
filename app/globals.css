@@ -9,7 +9,7 @@
   background-color: #f9f9f9;
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 2px 2px 6px rgba(255, 255, 255, 0.7);
+  box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.3);
   text-align: center;
 }
 
@@ -43,6 +43,12 @@
   position: relative;
 }
 
+.navbar-r {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+
 .navbar a {
   margin-right: 60px;
   text-decoration: none;
@@ -55,6 +61,7 @@
   width: 100%;
   height: auto;
 }
+
 .footer {
   background-color: #332f2e;
   padding: 1rem;
@@ -70,7 +77,7 @@
 }
 
 body {
-  background: #000;
+  background: #020715;
   margin: 0;
 }
 
@@ -92,8 +99,6 @@ body {
 .row-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  align-items: center;
-  justify-content: center;
   position: relative;
 }
 
@@ -103,6 +108,7 @@ body {
   position: relative;
   align-items: center;
   justify-content: space-evenly;
+  margin: 80px;
 }
 
 /* 스크롤바 전체 스타일 */
@@ -155,11 +161,13 @@ body {
 }
 
 .image-container {
-  margin-top: 20px;
   margin-bottom: -100px;
   position: relative;
   width: 100%;
   height: 100%;
+  display: grid;
+  place-content: center;
+  place-items: center;
 }
 
 .category-container {
@@ -181,6 +189,7 @@ body {
   text-decoration-thickness: 3px;
   font-weight: bold;
   text-decoration-color: chocolate;
+  font-size: 14px;
 }
 
 .button-container {
@@ -268,8 +277,6 @@ body {
   justify-content: space-between;
   flex: 0.1;
   margin: 4px;
-}
-.hover-btn {
 }
 
 .main-category-container {
@@ -362,4 +369,165 @@ body {
 
 .navbar-icon-container:hover {
   background: #332f2e;
+}
+
+.home-status-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.mates-container {
+  width: 100%;
+  display: flex;
+  color: #f1f1f1;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #000;
+  min-height: 550px;
+}
+
+.mates-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/bg5.png") no-repeat center center;
+  background-size: cover;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.mates-board {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  place-content: center;
+  place-items: center;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.mates-board-container {
+  flex: 0.9;
+}
+
+.mates-number-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex: 0.1;
+  background: #fff;
+  color: #000;
+}
+
+.mates-board-btn button {
+  width: 100%;
+  height: auto;
+}
+
+.mates-board-btn h4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 6px;
+  user-select: none;
+  padding-inline: 12px;
+}
+
+.mates-board-btn h4:hover {
+  background: #09c;
+  color: #fff;
+}
+
+.mates-board-column {
+  background: #fff;
+  color: #000;
+  /* border-radius: 10px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: small;
+  min-width: 80px;
+}
+
+.mates-board-column2 {
+  visibility: hidden;
+}
+.search-container {
+  display: flex;
+}
+.search-options-container {
+  position: relative;
+  display: inline-block;
+}
+
+.search-options {
+  font-size: 14px;
+  background: #fff;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.search-input2 {
+  font-size: 14px;
+  background-color: #f9f9f9;
+  padding: 4px 20px;
+  border: none;
+  border-radius: 24px;
+  width: 150px;
+  outline: none;
+  transition: width 0.3s ease-in-out;
+}
+
+.mates-board-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.mates-board-page span {
+  display: inline-block;
+  padding: 8px 12px;
+  margin-right: 4px;
+  background-color: #f9f9f9;
+  color: #000;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+  user-select: none;
+  transition: background-color 0.3s;
+}
+
+.mates-board-page span:hover {
+  background-color: #099;
+  color: #fff;
+}
+
+.mates-board-page span.active {
+  background-color: #099;
+  color: #fff;
+}
+
+.mates-board-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+}
+
+.search-container2 {
+  visibility: hidden;
 }

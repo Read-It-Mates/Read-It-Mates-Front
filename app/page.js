@@ -1,5 +1,6 @@
 import { connectDB } from "/util/database";
 import Category_image from "./Category_image";
+import Mates_status from "./Mates_status";
 
 export default async function Home() {
   // 필요한 라이브러리 가져오기
@@ -306,7 +307,10 @@ export default async function Home() {
 
   return (
     <div>
-      <div style={{ height: 150 }}></div>
+      <div className="home-status-container">
+        <Mates_status />
+      </div>
+      <div style={{ height: 50 }}></div>
       <div className="category-title">베스트셀러</div>
       <div className="main-container">
         <Category_image data={result} />
