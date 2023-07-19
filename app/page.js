@@ -305,31 +305,91 @@ export default async function Home() {
   let result = await db.collection("bestSellers").find().toArray();
   result = result.slice().sort(() => Math.random() - 0.5);
 
+  let gridNum1 = 6;
+  let gridNum2 = 9;
+  let gridNum3 = 14;
+
+  let columnNum1 = 1;
+  let columnNum2 = 2;
+  let columnNum3 = 3;
+
+  let country1 = "국내도서";
+  let country2 = "영미도서";
+  let country3 = "일본도서";
+  let country4 = "해외도서";
+  let country5 = "추천도서";
   return (
     <div>
       <div className="home-status-container">
         <Mates_status />
       </div>
-      <div style={{ height: 50 }}></div>
-      <div className="category-title">베스트셀러</div>
-      <div className="main-container">
-        <Category_image data={result} />
-        <Category_image data={result} />
-        <Category_image data={result} />
+      <div className="kind-container1">
+        <div className="category-title">베스트셀러</div>
+        <div className="main-container">
+          <Category_image
+            data={result}
+            num={gridNum1}
+            column={columnNum1}
+            country={country1}
+          />
+          <Category_image
+            data={result}
+            num={gridNum1}
+            column={columnNum1}
+            country={country2}
+          />
+          <Category_image
+            data={result}
+            num={gridNum1}
+            column={columnNum1}
+            country={country3}
+          />
+        </div>
       </div>
-      <div className="category-title">스테디셀러</div>
-      <div className="main-container">
-        <Category_image data={result} />
-        <Category_image data={result} />
+      <div className="kind-container2">
+        <div className="category-title">스테디셀러</div>
+        <div className="main-container">
+          <Category_image
+            data={result}
+            num={gridNum2}
+            column={columnNum2}
+            country={country1}
+          />
+          <Category_image
+            data={result}
+            num={gridNum2}
+            column={columnNum2}
+            country={country4}
+          />
+        </div>
       </div>
-      <div className="category-title">신간베스트</div>
-      <div className="main-container">
-        <Category_image data={result} />
-        <Category_image data={result} />
+      <div className="kind-container3">
+        <div className="category-title">신간베스트</div>
+        <div className="main-container">
+          <Category_image
+            data={result}
+            num={gridNum2}
+            column={columnNum2}
+            country={country1}
+          />
+          <Category_image
+            data={result}
+            num={gridNum2}
+            column={columnNum2}
+            country={country4}
+          />
+        </div>
       </div>
-      <div className="category-title">리딧베스트</div>
-      <div className="main-container">
-        <Category_image data={result} />
+      <div className="kind-container4">
+        <div className="category-title">리딧베스트</div>
+        <div className="main-container">
+          <Category_image
+            data={result}
+            num={gridNum3}
+            column={columnNum3}
+            country={country5}
+          />
+        </div>
       </div>
     </div>
   );

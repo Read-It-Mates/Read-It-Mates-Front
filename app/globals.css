@@ -37,6 +37,8 @@
   display: flex;
   justify-content: space-between;
   font-weight: bold;
+  border-width: 2px;
+  border-color: #f1f1f1;
 }
 
 .navbar-l {
@@ -96,10 +98,25 @@ body {
   width: 200px;
 }
 
-.row-container {
+.row-container1 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   position: relative;
+  margin-bottom: 100px;
+}
+
+.row-container2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  margin-bottom: 100px;
+}
+
+.row-container3 {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  position: relative;
+  margin-bottom: 100px;
 }
 
 .main-container {
@@ -175,14 +192,12 @@ body {
   justify-content: center; /* 요소들을 가운데로 정렬합니다. */
   flex-wrap: wrap; /* 요소들이 컨테이너를 벗어나지 않고 적절하게 줄바꿈하도록 합니다. */
   flex-direction: row;
-  margin: 8px;
   align-items: center;
 }
 
 .category-title {
   display: flex; /* Flexbox를 사용하여 요소를 정렬합니다. */
   justify-content: center; /* 요소들을 가운데로 정렬합니다. */
-  margin: 10px; /* 제목과 버튼 사이에 간격을 추가합니다. */
   color: #fff;
   text-decoration: underline;
   text-underline-offset: 12px;
@@ -375,7 +390,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .mates-container {
@@ -388,6 +403,9 @@ body {
   border-radius: 20px;
   background: #000;
   min-height: 550px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mates-container::before {
@@ -441,6 +459,7 @@ body {
   border-radius: 6px;
   user-select: none;
   padding-inline: 12px;
+  transition: background 0.3s;
 }
 
 .mates-board-btn h4:hover {
@@ -530,4 +549,40 @@ body {
 
 .search-container2 {
   visibility: hidden;
+}
+
+.category-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.category-country {
+  margin-bottom: 100px;
+  position: relative;
+  background-color: #099;
+  color: #fff;
+  padding: 8px;
+  font-size: small;
+  border-radius: 4px;
+}
+
+.kind-container1 {
+  margin-bottom: -80px;
+  margin-top: 10px;
+}
+
+.kind-container2 {
+  margin-bottom: -80px;
+  margin-top: 90px;
+}
+
+.kind-container3 {
+  margin-bottom: -80px;
+  margin-top: 90px;
+}
+
+.kind-container4 {
+  margin-bottom: -80px;
+  margin-top: 90px;
 }

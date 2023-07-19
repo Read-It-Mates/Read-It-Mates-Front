@@ -19,7 +19,7 @@ export default function Mates_status() {
             <h4>10</h4>
           </div>
           <div className="mates-board-name">
-            <div className="mates-board-column">게시판 이름</div>
+            <div className="mates-board-column">게시글 이름</div>
             <h4>책 같이 읽으실분~</h4>
             <h4>책 소개 및 후기</h4>
             <h4>혼자 읽기 아쉬운 책</h4>
@@ -90,7 +90,7 @@ export default function Mates_status() {
             <div className="search-options-container">
               <select className="search-options" name="search-option">
                 <option value="board" selected>
-                  게시판 이름
+                  게시글 이름
                 </option>
                 <option value="title">책 제목</option>
                 <option value="title">장르</option>
@@ -111,7 +111,7 @@ export default function Mates_status() {
             <div className="search-options-container">
               <select className="search-options" name="search-option">
                 <option value="board" selected>
-                  게시판 이름
+                  게시글 이름
                 </option>
                 <option value="title">책 제목</option>
                 <option value="title">장르</option>

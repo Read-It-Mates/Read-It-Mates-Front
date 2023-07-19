@@ -51,7 +51,10 @@ export default function RootLayout({ children }) {
       <body>
         <div
           className="navbar"
-          style={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}
+          style={{
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+          }}
         >
           <div className="navbar-l">
             <Link href="/">
