@@ -37,8 +37,6 @@
   display: flex;
   justify-content: space-between;
   font-weight: bold;
-  border-width: 2px;
-  border-color: #f1f1f1;
 }
 
 .navbar-l {
@@ -404,7 +402,6 @@ body {
   background: #000;
   min-height: 550px;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -555,6 +552,9 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+  padding: 30px;
+  border: 2px solid #332f2e;
+  border-radius: 10px;
 }
 
 .category-country {
@@ -583,6 +583,6 @@ body {
 }
 
 .kind-container4 {
-  margin-bottom: -80px;
+  margin-bottom: -70px;
   margin-top: 90px;
 }
