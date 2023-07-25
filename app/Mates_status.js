@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function Mates_status() {
   return (
     <div className="mates-container">
@@ -19,7 +21,7 @@ export default function Mates_status() {
             <h4>10</h4>
           </div>
           <div className="mates-board-name">
-            <div className="mates-board-column">게시글 이름</div>
+            <div className="mates-board-column">방 제목</div>
             <h4>책 같이 읽으실분~</h4>
             <h4>책 소개 및 후기</h4>
             <h4>혼자 읽기 아쉬운 책</h4>
@@ -90,7 +92,7 @@ export default function Mates_status() {
             <div className="search-options-container">
               <select className="search-options" name="search-option">
                 <option value="board" selected>
-                  게시글 이름
+                  방 제목
                 </option>
                 <option value="title">책 제목</option>
                 <option value="title">장르</option>
@@ -111,7 +113,7 @@ export default function Mates_status() {
             <div className="search-options-container">
               <select className="search-options" name="search-option">
                 <option value="board" selected>
-                  게시글 이름
+                  방 제목
                 </option>
                 <option value="title">책 제목</option>
                 <option value="title">장르</option>
@@ -121,9 +123,16 @@ export default function Mates_status() {
         </div>
       </div>
       <div className="mates-number-container">
-        <h4>전체: 357명</h4>
-        <h4>온라인: 192명</h4>
-        <h4>오프라인: 165명</h4>
+        <div className="mates-number">
+          <h4>전체: 357명</h4>
+          <h4>온라인: 192명</h4>
+          <h4>오프라인: 165명</h4>
+        </div>
+        <div className="mates-open-btn-container">
+          <Link href="/makeRoom">
+            <button className="mates-open-btn">방 만들기</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

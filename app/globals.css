@@ -1,3 +1,19 @@
+body {
+  overflow: auto;
+  zoom: 90%;
+  font-family: "Pretendard-Regular";
+  background: #020715;
+  margin: 0;
+}
+
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -67,11 +83,6 @@
   bottom: 0;
   left: 0;
   right: 0;
-}
-
-body {
-  background: #020715;
-  margin: 0;
 }
 
 .search-input {
@@ -294,7 +305,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  height: 20px;
+  height: 40px;
   color: #f1f1f1;
 }
 
@@ -303,7 +314,7 @@ body {
     transform: scale(1);
   }
   25% {
-    transform: scale(1.1);
+    transform: scale(1);
   }
   50% {
     transform: scale(1);
@@ -321,7 +332,7 @@ body {
     transform: scale(1);
   }
   25% {
-    transform: scale(1.1);
+    transform: scale(1);
   }
   50% {
     transform: scale(1);
@@ -339,7 +350,7 @@ body {
 .navbar3-icon {
   transition: background 0.5s ease-in-out;
   animation: 0s linear;
-  margin: -5px;
+  margin: -4px;
   margin-right: -60px;
 }
 
@@ -426,6 +437,7 @@ body {
 .mates-number-container {
   display: flex;
   align-items: center;
+  justify-content: space-around;
   flex-direction: column;
   flex: 0.1;
   background: #fff;
@@ -472,9 +484,10 @@ body {
 }
 .search-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .search-options-container {
-  position: relative;
   display: inline-block;
 }
 
@@ -533,7 +546,6 @@ body {
 .mates-board-bottom {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  place-items: center;
 }
 
 .search-container2 {
@@ -544,7 +556,8 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 30px;
+  padding: 20px;
+  padding-inline: 50px;
   border: 2px solid #332f2e;
   border-radius: 10px;
   transition: transform 0.3s;
@@ -578,4 +591,23 @@ body {
 .kind-container4 {
   margin-bottom: -70px;
   margin-top: 90px;
+}
+
+.mates-open-btn-container {
+  position: relative;
+}
+
+.mates-open-btn {
+  background-color: #000;
+  color: #fff;
+  border-radius: 10px;
+  border: 0px;
+  padding: 10px;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.mates-open-btn:hover {
+  background-color: #099;
+  cursor: pointer;
 }
