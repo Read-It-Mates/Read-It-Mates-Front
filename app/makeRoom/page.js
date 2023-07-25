@@ -1,3 +1,3 @@
-export default function makeRoom() {
-  return <div>gd</div>;
+export default function MakeRoom() {
+  return <div>makeRoom</div>;
 }

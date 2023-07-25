@@ -1,8 +1,10 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 export default function Category_image({ data, num, column, country }) {
+  // 이미지 useRef
   const coverImageRefs = useRef(data.map(() => React.createRef()));
+  // 이미지 hover 인덱스 체크
   const [hoverIndex, setHoverIndex] = useState(-1);
 
   return (

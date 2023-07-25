@@ -1,6 +1,6 @@
 import { connectDB } from "/util/database";
-import Category_image from "./Category_image";
-import Mates_status from "./Mates_status";
+import Category_image from "./components/Category_image";
+import Room from "./components/Room";
 
 export default async function Home() {
   // 필요한 라이브러리 가져오기
@@ -301,28 +301,39 @@ export default async function Home() {
   //       // console.error("크롤링 도중 에러 발생:", error);
   //     });
   // }
+
+  // db 접근
   const db = (await connectDB).db("books");
+  // 데이터 가져오기
   let result = await db.collection("bestSellers").find().toArray();
+
+  // 메인페이지 책 랜덤함수
   result = result.slice().sort(() => Math.random() - 0.5);
 
+  // 정렬용 props
   let gridNum1 = 6;
   let gridNum2 = 9;
   let gridNum3 = 14;
 
+  // 열 개수 props
   let columnNum1 = 1;
   let columnNum2 = 2;
   let columnNum3 = 3;
 
+  // 나라 props
   let country1 = "국내도서";
   let country2 = "영미도서";
   let country3 = "일본도서";
   let country4 = "해외도서";
   let country5 = "추천도서";
+
   return (
     <div>
+      {/* 리딩룸 */}
       <div className="home-status-container">
-        <Mates_status />
+        <Room />
       </div>
+      {/* 베스트셀러 */}
       <div className="kind-container1">
         <div className="category-title">베스트셀러</div>
         <div className="main-container">
@@ -346,6 +357,7 @@ export default async function Home() {
           />
         </div>
       </div>
+      {/* 스테디셀러 */}
       <div className="kind-container2">
         <div className="category-title">스테디셀러</div>
         <div className="main-container">
@@ -363,6 +375,7 @@ export default async function Home() {
           />
         </div>
       </div>
+      {/* 신간베스트 */}
       <div className="kind-container3">
         <div className="category-title">신간베스트</div>
         <div className="main-container">
@@ -380,6 +393,7 @@ export default async function Home() {
           />
         </div>
       </div>
+      {/* 리딧베스트 */}
       <div className="kind-container4">
         <div className="category-title">리딧베스트</div>
         <div className="main-container">

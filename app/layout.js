@@ -29,18 +29,21 @@ export default function RootLayout({ children }) {
     };
   }, []);
 
+  // 이미지 배경 변경 함수
   const changeBackground = (event) => {
-    // 랜덤하게 0 또는 1이 선택되도록 설정합니다.
+    // 랜덤하게 0 or 1 선택.
     const randomIndex = Math.floor(Math.random() * 2);
     const images = ["/UK.png", "/US.png"];
 
-    // 선택한 이미지 URL을 사용하여 이미지 경로를 업데이트합니다.
+    // 이미지 경로 업데이트
     const selectedImage = images[randomIndex];
 
+    // 이미지 배경 변경
     const element = event.target;
     element.style.backgroundImage = `url(${selectedImage})`;
   };
 
+  // 이미지 배경 안보이게 하는 함수
   const removeBackground = (event) => {
     const element = event.target;
     element.style.backgroundImage = "none";
@@ -49,6 +52,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        {/* 상단바 */}
         <div
           className="navbar"
           style={{
@@ -68,10 +72,10 @@ export default function RootLayout({ children }) {
           </div>
           <div className="navbar-container">
             <div className="navbar-icon-container">
-              <Link href="/bestSellers">
+              <Link href="/domestic">
                 <img src="/navbar1.png" className="navbar1-icon"></img>
               </Link>
-              <Link href="/steadySellers">
+              <Link href="/foreign">
                 <img
                   src="/navbar2.png"
                   className="navbar2-icon"
@@ -79,7 +83,7 @@ export default function RootLayout({ children }) {
                   onMouseLeave={removeBackground}
                 ></img>
               </Link>
-              <Link href="/">
+              <Link href="/japanese">
                 <img src="/navbar3.png" className="navbar3-icon"></img>
               </Link>
             </div>
@@ -90,11 +94,11 @@ export default function RootLayout({ children }) {
             </div>
           </div>
           <div className="navbar-r">
-            <Link href="/" className="r-link">
+            <Link href="/sign" className="r-link">
               <RiLoginBoxLine />
               sign in
             </Link>
-            <Link href="/" className="r-link">
+            <Link href="/mypage" className="r-link">
               <CgProfile />
               mypage
             </Link>

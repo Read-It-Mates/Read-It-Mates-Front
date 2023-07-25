@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 
-export default function Mates_status() {
+export default function Room() {
   return (
+    // 리딩룸 게시판
     <div className="mates-container">
       <div className="mates-board-container">
         <div className="mates-board">

@@ -1,8 +1,8 @@
 import { connectDB } from "/util/database";
 
-export default async function BestSellers() {
+export default async function Foreign() {
   const db = (await connectDB).db("books");
-  let result = await db.collection("bestSellers").find().toArray();
+  let result = await db.collection("steadySellers").find().toArray();
 
   return (
     <div className="container">
