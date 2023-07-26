@@ -306,7 +306,7 @@ export default async function Home() {
   const db = (await connectDB).db("books");
   // 데이터 가져오기
   let result = await db.collection("bestSellers").find().toArray();
-
+  let result2 = await db.collection("room").find().toArray();
   // 메인페이지 책 랜덤함수
   result = result.slice().sort(() => Math.random() - 0.5);
 
@@ -322,7 +322,7 @@ export default async function Home() {
 
   // 나라 props
   let country1 = "국내도서";
-  let country2 = "영미도서";
+  let country2 = "서양도서";
   let country3 = "일본도서";
   let country4 = "해외도서";
   let country5 = "추천도서";
@@ -331,7 +331,7 @@ export default async function Home() {
     <div>
       {/* 리딩룸 */}
       <div className="home-status-container">
-        <Room />
+        <Room data={result2} />
       </div>
       {/* 베스트셀러 */}
       <div className="kind-container1">

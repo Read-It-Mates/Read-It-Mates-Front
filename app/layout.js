@@ -75,7 +75,7 @@ export default function RootLayout({ children }) {
               <Link href="/domestic">
                 <img src="/navbar1.png" className="navbar1-icon"></img>
               </Link>
-              <Link href="/foreign">
+              <Link href="/western">
                 <img
                   src="/navbar2.png"
                   className="navbar2-icon"
@@ -89,7 +89,7 @@ export default function RootLayout({ children }) {
             </div>
             <div className="navbar-title-container">
               <h4>국내도서</h4>
-              <h4>영미도서</h4>
+              <h4>서양도서</h4>
               <h4>일본도서</h4>
             </div>
           </div>

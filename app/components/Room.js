@@ -1,91 +1,85 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export default function Room() {
+export default function Room({ data }) {
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
+  const [result, setResult] = useState([]); // 결과 데이터 상태
+  const itemsPerPage = 7; // 페이지 당 표시되는 항목 수
+
+  // 페이지 변경에 따른 데이터 변경
+  useEffect(() => {
+    setResult(data);
+  }, []);
+
+  // 페이지 관련 변수
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = result.slice(indexOfFirstItem, indexOfLastItem);
+
+  // 페이지 변경 시 실행되는 함수
+  const changePage = (pageNumber) => {
+    const totalPages = Math.ceil(result.length / itemsPerPage);
+
+    // 페이지 번호가 유효한 범위 내에 있는지 확인
+    if (pageNumber < 1 || pageNumber > totalPages) {
+      return; // 유효하지 않으면 함수를 종료
+    }
+
+    setCurrentPage(pageNumber);
+  };
+
+  // 참여하기 버튼을 누르는 경우 새로운 창 띄우기
+  const openNewWindow = (id) => {
+    const width = window.innerWidth * 0.9;
+    const height = window.innerHeight * 0.9;
+    window.open(
+      `/readingRoom/${id}`,
+      "_blank",
+      `width=${width},height=${height}`
+    );
+  };
+
   return (
     // 리딩룸 게시판
     <div className="mates-container">
       <div className="mates-board-container">
         <div className="mates-board">
-          <div className="mates-board-num">
-            <div className="mates-board-column">번호</div>
-            <h4>1</h4>
-            <h4>2</h4>
-            <h4>3</h4>
-            <h4>4</h4>
-            <h4>5</h4>
-            <h4>6</h4>
-            <h4>7</h4>
-            <h4>8</h4>
-            <h4>9</h4>
-            <h4>10</h4>
-          </div>
-          <div className="mates-board-name">
-            <div className="mates-board-column">방 제목</div>
-            <h4>책 같이 읽으실분~</h4>
-            <h4>책 소개 및 후기</h4>
-            <h4>혼자 읽기 아쉬운 책</h4>
-            <h4>이런 책 어때요?</h4>
-            <h4>지금 읽고 있는 책</h4>
-            <h4>웃음이 절로 나오는 책들</h4>
-            <h4>감동의 순간들</h4>
-            <h4>인생 책 찾기</h4>
-            <h4>책에 관한 질문방</h4>
-            <h4>자유롭게 이야기하기</h4>
-          </div>
-          <div className="mates-board-title">
-            <div className="mates-board-column">책 제목</div>
-            <h4>탐욕의 원죄</h4>
-            <h4>어떻게 멘토를 찾고 신뢰할 수 있나요</h4>
-            <h4>시간의 실과 공간의 바늘</h4>
-            <h4>밤의 신화</h4>
-            <h4>나는 오늘도 인간을 먹었다</h4>
-            <h4>인간 본능</h4>
-            <h4>전쟁의 길고 어두운 무늬</h4>
-            <h4>경제학산책</h4>
-            <h4>속삭이는 사람</h4>
-            <h4>나의 멋진 사촌</h4>
-          </div>
-          <div className="mates-board-genre">
-            <div className="mates-board-column">장르</div>
-            <h4>추리 미스터리</h4>
-            <h4>로맨스</h4>
-            <h4>판타지</h4>
-            <h4>판타지</h4>
-            <h4>시조</h4>
-            <h4>과학 서적</h4>
-            <h4>역사와 문화</h4>
-            <h4>경제 경영</h4>
-            <h4>에세이</h4>
-            <h4>기타 장르</h4>
-          </div>
-          <div className="mates-board-number">
-            <div className="mates-board-column">인원</div>
-            <h4>11/32</h4>
-            <h4>23/46</h4>
-            <h4>7/33</h4>
-            <h4>2/3</h4>
-            <h4>8/96</h4>
-            <h4>31/32</h4>
-            <h4>8/8</h4>
-            <h4>7/21</h4>
-            <h4>16/18</h4>
-            <h4>14/20</h4>
-          </div>
+          <div className="mates-board-column">번호</div>
+          <div className="mates-board-column">방 제목</div>
+          <div className="mates-board-column">책 제목</div>
+          <div className="mates-board-column">장르</div>
+          <div className="mates-board-column">인원</div>
           <div className="mates-board-btn">
             <div className="mates-board-column2">참여하기</div>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
-            <h4>참여하기</h4>
           </div>
+          {currentItems.map((item, index) => {
+            return (
+              <>
+                <div className="mates-board-num">
+                  <h4>{item.index}</h4>
+                </div>
+                <div className="mates-board-name">
+                  <h4>{item.roomTitle}</h4>
+                </div>
+                <div className="mates-board-title">
+                  <h4>{item.bookTitle}</h4>
+                </div>
+                <div className="mates-board-genre">
+                  <h4>추리 미스터리</h4>
+                </div>
+                <div className="mates-board-number">
+                  <h4>11/32</h4>
+                </div>
+                <div
+                  className="mates-board-btn"
+                  onClick={() => openNewWindow(item._id)}
+                >
+                  <h4>참여하기</h4>
+                </div>
+              </>
+            );
+          })}
         </div>
         <div className="mates-board-bottom">
           <div className="search-container2">
@@ -101,13 +95,20 @@ export default function Room() {
             </div>
           </div>
           <div className="mates-board-page">
-            <span>left</span>
-            <span className="active">1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
-            <span>5</span>
-            <span>right</span>
+            <span onClick={() => changePage(currentPage - 1)}>left</span>
+            {Array.from(
+              { length: Math.ceil(result.length / itemsPerPage) },
+              (_, i) => (
+                <span
+                  key={i + 1}
+                  className={i + 1 === currentPage ? "active" : ""}
+                  onClick={() => changePage(i + 1)}
+                >
+                  {i + 1}
+                </span>
+              )
+            )}
+            <span onClick={() => changePage(currentPage + 1)}>right</span>
           </div>
           <div className="search-container">
             <input className="search-input2" type="text" placeholder="검색" />
