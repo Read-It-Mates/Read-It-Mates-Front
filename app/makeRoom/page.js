@@ -6,6 +6,7 @@ export default function MakeRoom() {
   const [bookTitle, setBookTitle] = useState("");
   const [bookSuggestions, setBookSuggestions] = useState([]);
   const [selectedAuthor, setSelectedAuthor] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
 
   const newPost = {
@@ -13,6 +14,7 @@ export default function MakeRoom() {
     bookTitle: bookTitle,
     author: selectedAuthor,
     image: selectedImageUrl,
+    category: selectedCategory,
   };
 
   useEffect(() => {
@@ -90,7 +92,8 @@ export default function MakeRoom() {
                   onClick={() => {
                     setBookTitle(book.title);
                     setSelectedAuthor(book.author); // 저자를 선택된 책의 저자로 설정.
-                    setSelectedImageUrl(book.imageUrl); // 이미지 주소를 선택된 책의 이미지 주소로 설정.
+                    setSelectedCategory(book.category); // 카테고리를 선택된 책의 카테고리로 설정.
+                    setSelectedImageUrl(book.image); // 이미지 주소를 선택된 책의 이미지 주소로 설정.
                     setBookSuggestions([]); // 선택된 데이터 처리 후 목록을 지움.
                   }}
                 >
@@ -102,12 +105,19 @@ export default function MakeRoom() {
         </div>
         {/* 작성한 장르, 이미지, 저자 값 대입 */}
         <div className="book-info">
+          <div className="make-selected">
+            <div>{selectedAuthor ? "저자: " + selectedAuthor : null}</div>
+            <div>{selectedCategory ? "장르: " + selectedCategory : null} </div>
+          </div>
           <p>
             {selectedImageUrl ? (
-              <img src={selectedImageUrl} alt="책 표지" />
+              <img
+                className="coverImage3"
+                src={selectedImageUrl}
+                alt="책 표지"
+              />
             ) : null}
           </p>
-          <p>{selectedAuthor ? "저자: " + selectedAuthor : null} </p>
         </div>
 
         <div className="make-button">

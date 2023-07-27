@@ -66,7 +66,7 @@ export default function Room({ data }) {
                   <h4>{item.bookTitle}</h4>
                 </div>
                 <div className="mates-board-genre">
-                  <h4>추리 미스터리</h4>
+                  <h4>{item.category}</h4>
                 </div>
                 <div className="mates-board-number">
                   <h4>11/32</h4>

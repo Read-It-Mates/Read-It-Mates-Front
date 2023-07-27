@@ -15,7 +15,7 @@ export default async function Japanese() {
               <br></br>
               {" - " + item.author + " - "}
             </h4>
-            <img className="coverImage2" src={item.imageUrl} alt=""></img>
+            <img className="coverImage2" src={item.image} alt=""></img>
           </div>
         );
       })}

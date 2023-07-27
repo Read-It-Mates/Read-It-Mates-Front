@@ -23,20 +23,21 @@ export default function Category_image({ data, num, column, country }) {
                 <img
                   ref={coverImageRefs.current[index]}
                   className="coverImage"
-                  src={item.imageUrl}
+                  src={item.image}
                   alt=""
                 ></img>
                 {index === hoverIndex && (
                   <div className="hover-container">
                     <div className="hover-index">
-                      <div className="hover-jenre">과학</div>
+                      <div className="hover-jenre">{item.category + " 』"}</div>
                       {item.index + "위"}
                     </div>
                     <div className="hover-title">{"<" + item.title + ">"}</div>
+                    <div className="hover-intro">{item.intro}</div>
                     <div className="hover-author">{item.author}</div>
                     <div className="hover-online">
-                      접속자: 3명
-                      <button className="hover-btn">참여하기</button>
+                      온라인: 3명
+                      <h3 className="hover-btn">참여하기</h3>
                     </div>
                   </div>
                 )}

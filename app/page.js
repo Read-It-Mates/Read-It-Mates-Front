@@ -2,311 +2,85 @@ import { connectDB } from "/util/database";
 import Category_image from "./components/Category_image";
 import Room from "./components/Room";
 
+// 필요한 라이브러리 가져오기
+const axios = require("axios");
+const cheerio = require("cheerio");
+const iconv = require("iconv-lite");
+
+// 베스트셀러 페이지 URL
+const bestURL =
+  "https://www.yes24.com/24/category/bestseller?CategoryNumber=001&sumgb=06&PageNumber=1&FetchSize=10";
+
+export async function crawlDetails($, element, index, intro) {
+  const title = $(element).find("p > a").first().text().trim();
+  const author = $(element).find("div > a").first().text().trim();
+  const linkElement = $(element).find("p > a").attr("href");
+  const link = "https://www.yes24.com" + linkElement;
+  const bestseller = {
+    index: index + 1,
+    title,
+    author,
+    intro,
+  };
+  try {
+    const response = await axios.get(link, { responseType: "arraybuffer" });
+    const decodedData = iconv.decode(response.data, "utf-8").toString();
+    const details$ = cheerio.load(decodedData);
+
+    // 이미지 크롤링
+    const imageElement = details$("em.imgBdr > img.gImg");
+    const image = imageElement.attr("src") || imageElement.data("src");
+
+    // 카테고리 크롤링
+    const category = details$("#infoset_goodsCate div.infoSetCont_wrap")
+      .find("ul.yesAlertLi > li")
+      .first()
+      .find("a")
+      .eq(1)
+      .text();
+
+    if (title && author) {
+      bestseller.image = image;
+      bestseller.category = category;
+    }
+
+    return bestseller;
+  } catch (error) {
+    console.error("Error while crawling details:", error.message);
+  }
+}
+
 export default async function Home() {
-  // 필요한 라이브러리 가져오기
-  const axios = require("axios");
-  const cheerio = require("cheerio");
-  // 베스트셀러 책 정보를 저장할 배열
-  const bestSellers = [];
-  // 스테디셀러 책 정보를 저장할 배열
-  const steadySellers = [];
-  // 상세페이지 정보를 저장할 배열
-  const detail = [];
-  // 알라딘 베스트셀러 페이지 URL
-  const aladinBestSellerURL =
-    "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&BranchType=1&CID=0&page=1&cnt=1000&SortOrder=1";
-  // 알라딘 베스트셀러 페이지 URL2
-  const aladinBestSellerURL2 =
-    "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&BranchType=1&CID=0&page=2&cnt=1000&SortOrder=1";
-  // 알라딘 스테디셀러 페이지 URL
-  const aladinSteadySellerURL =
-    "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=SteadySeller&BranchType=1&CID=0&page=1&cnt=100&SortOrder=1";
-  // 알라딘 스테디셀러 페이지 URL2
-  const aladinSteadySellerURL2 =
-    "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=SteadySeller&BranchType=1&CID=0&page=2&cnt=100&SortOrder=1";
+  const response = await axios.get(bestURL, { responseType: "arraybuffer" });
+  const decodedData = iconv.decode(response.data, "EUC-KR").toString();
+  const $ = cheerio.load(decodedData);
+  const bestsellers = [];
 
-  // --------------------------------------베스트셀러-----------------------------------------
+  // intro 크롤링
+  const intros = $(".line > p.read")
+    .map((_, p) => $(p).text().trim())
+    .get();
 
-  // axios HTTP 요청
-  // await axios
-  //   .get(aladinBestSellerURL)
-  //   .then((response) => {
-  //     // 요청 결과 상태가 정상일 경우
-  //     if (response.status === 200) {
-  //       // HTML 데이터 변수
-  //       const html = response.data;
-  //       // cheerio를 사용하여 HTML 데이터를 분석 및 추출하기 쉽도록 처리
-  //       const $ = cheerio.load(html);
+  const bestsellersPromises = $(".goodsTxtInfo")
+    .map(async (index, element) => {
+      const bestseller = await crawlDetails($, element, index, intros[index]);
+      return bestseller;
+    })
+    .get();
 
-  //       // 각 베스트셀러 책 아이템에 대해 작업
-  //       $(".ss_book_box").each((index, element) => {
-  //         // 책 제목 추출
-  //         const title = $(element).find(".bo3 > b").text();
-  //         // 저자 추출
-  //         const author = $(element)
-  //           .find(".ss_book_list ul li:eq(2) > a:eq(0)")
-  //           .text();
-  //         // 링크 추출
-  //         let link = $(element)
-  //           .find(".ss_book_list ul li:eq(1) > a:eq(0)")
-  //           .attr("href");
-  //         if (link.includes("Search")) {
-  //           link = $(element)
-  //             .find(".ss_book_list ul li:eq(0) > a:eq(0)")
-  //             .attr("href");
-  //         }
-  //         // 이미지 추출
-  //         let imageUrl = $(element).find(".front_cover").attr("src");
-  //         // 추출한 정보를 배열에 추가
-  //         bestSellers.push({
-  //           index: index + 1,
-  //           title,
-  //           author,
-  //           link,
-  //           imageUrl,
-  //         });
-  //       });
-  //     }
-  //   })
-  //   .then(async () => {
-  //     try {
-  //       // 베스트셀러 정보 배열 전체를 서버에 전달
-  //       await axios.post("http://localhost:3000/api/post/bestSellers", {
-  //         books: bestSellers,
-  //       });
-  //     } catch (error) {
-  //       // console.error("데이터 전송 중 오류 발생:", error);
-  //     }
-  //   })
+  // bestsellers 배열에 추가
+  bestsellers.push(...(await Promise.all(bestsellersPromises)));
 
-  //   // 에러 처리: 크롤링 도중 에러가 발생한 경우
-  //   .catch((error) => {
-  //     // console.error("크롤링 도중 에러 발생:", error);
-  //   });
-
-  // // --------------------------------------베스트셀러2-----------------------------------------
-
-  // // axios HTTP 요청
-  // await axios
-  //   .get(aladinBestSellerURL2)
-  //   .then((response) => {
-  //     // 요청 결과 상태가 정상일 경우
-  //     if (response.status === 200) {
-  //       // HTML 데이터 변수
-  //       const html = response.data;
-  //       // cheerio를 사용하여 HTML 데이터를 분석 및 추출하기 쉽도록 처리
-  //       const $ = cheerio.load(html);
-
-  //       // 각 베스트셀러 책 아이템에 대해 작업
-  //       $(".ss_book_box").each((index, element) => {
-  //         // 책 제목 추출
-  //         const title = $(element).find(".bo3 > b").text();
-  //         // 저자 추출
-  //         const author = $(element)
-  //           .find(".ss_book_list ul li:eq(2) > a:eq(0)")
-  //           .text();
-  //         // 링크 추출
-  //         let link = $(element)
-  //           .find(".ss_book_list ul li:eq(1) > a:eq(0)")
-  //           .attr("href");
-  //         // 이미지 추출
-  //         let imageUrl = $(element).find(".front_cover").attr("src");
-  //         // 추출한 정보를 배열에 추가
-  //         bestSellers.push({
-  //           index: index + 51,
-  //           title,
-  //           author,
-  //           link,
-  //           imageUrl,
-  //         });
-  //       });
-  //     }
-  //   })
-  //   .then(async () => {
-  //     try {
-  //       // 베스트셀러 정보 배열 전체를 서버에 전달
-  //       await axios.post("http://localhost:3000/api/post/bestSellers", {
-  //         books: bestSellers,
-  //       });
-  //     } catch (error) {
-  //       console.error("데이터 전송 중 오류 발생:", error);
-  //     }
-  //   })
-
-  //   // 에러 처리: 크롤링 도중 에러가 발생한 경우
-  //   .catch((error) => {
-  //     console.error("크롤링 도중 에러 발생:", error);
-  //   });
-
-  // // --------------------------------------스테디셀러-----------------------------------------
-
-  // // axios HTTP 요청
-  // await axios
-  //   .get(aladinSteadySellerURL)
-  //   .then((response) => {
-  //     // 요청 결과 상태가 정상일 경우
-  //     if (response.status === 200) {
-  //       // HTML 데이터 변수
-  //       const html = response.data;
-  //       // cheerio를 사용하여 HTML 데이터를 분석 및 추출하기 쉽도록 처리
-  //       const $ = cheerio.load(html);
-
-  //       // 각 스테디셀러 책 아이템에 대해 작업
-  //       $(".ss_book_box").each((index, element) => {
-  //         // 책 제목 추출
-  //         const title = $(element).find(".bo3 > b").text();
-  //         // 저자 추출
-  //         const author = $(element)
-  //           .find(".ss_book_list ul li:eq(2) > a:eq(0)")
-  //           .text();
-  //         // 링크 추출
-  //         let link = $(element)
-  //           .find(".ss_book_list ul li:eq(1) > a:eq(0)")
-  //           .attr("href");
-  //         // 이미지 추출
-  //         let imageUrl = $(element).find(".front_cover.i_cover").attr("src");
-  //         // 추출한 정보를 배열에 추가
-  //         steadySellers.push({
-  //           index: index + 1,
-  //           title,
-  //           author,
-  //           link,
-  //           imageUrl,
-  //         });
-  //       });
-  //     }
-  //   })
-  //   .then(async () => {
-  //     try {
-  //       // 스테디셀러 정보 배열 전체를 서버에 전달
-  //       await axios.post("http://localhost:3000/api/post/steadySellers", {
-  //         books: steadySellers,
-  //       });
-  //     } catch (error) {
-  //       console.error("데이터 전송 중 오류 발생:", error);
-  //     }
-  //   })
-
-  //   // 에러 처리: 크롤링 도중 에러가 발생한 경우
-  //   .catch((error) => {
-  //     console.error("크롤링 도중 에러 발생:", error);
-  //   });
-
-  // // --------------------------------------스테디셀러2-----------------------------------------
-
-  // // axios HTTP 요청
-  // await axios
-  //   .get(aladinSteadySellerURL2)
-  //   .then((response) => {
-  //     // 요청 결과 상태가 정상일 경우
-  //     if (response.status === 200) {
-  //       // HTML 데이터 변수
-  //       const html = response.data;
-  //       // cheerio를 사용하여 HTML 데이터를 분석 및 추출하기 쉽도록 처리
-  //       const $ = cheerio.load(html);
-
-  //       // 각 스테디셀러 책 아이템에 대해 작업
-  //       $(".ss_book_box").each((index, element) => {
-  //         // 책 제목 추출
-  //         const title = $(element).find(".bo3 > b").text();
-  //         // 저자 추출
-  //         const author = $(element)
-  //           .find(".ss_book_list ul li:eq(2) > a:eq(0)")
-  //           .text();
-  //         // 링크 추출
-  //         let link = $(element)
-  //           .find(".ss_book_list ul li:eq(1) > a:eq(0)")
-  //           .attr("href");
-  //         // 이미지 추출
-  //         let imageUrl = $(element).find(".front_cover.i_cover").attr("src");
-  //         // 추출한 정보를 배열에 추가
-  //         steadySellers.push({
-  //           index: index + 51,
-  //           title,
-  //           author,
-  //           link,
-  //           imageUrl,
-  //         });
-  //       });
-  //     }
-  //   })
-  //   .then(async () => {
-  //     try {
-  //       // 스테디셀러 정보 배열 전체를 서버에 전달
-  //       await axios.post("http://localhost:3000/api/post/steadySellers", {
-  //         books: steadySellers,
-  //       });
-  //     } catch (error) {
-  //       console.error("데이터 전송 중 오류 발생:", error);
-  //     }
-  //   })
-
-  //   // 에러 처리: 크롤링 도중 에러가 발생한 경우
-  //   .catch((error) => {
-  //     console.error("크롤링 도중 에러 발생:", error);
-  //   });
-
-  // for (let i = 0; i < 50; i++) {
-  //   await axios
-  //     .get(result[i].link)
-  //     .then((response) => {
-  //       // 요청 결과 상태가 정상일 경우
-  //       if (response.status === 200) {
-  //         // HTML 데이터 변수
-  //         const html = response.data;
-  //         // cheerio를 사용하여 HTML 데이터를 분석 및 추출하기 쉽도록 처리
-  //         const $ = cheerio.load(html);
-
-  //         // 각 베스트셀러 책 아이템에 대해 작업
-  //         $(".Ere_prod_middlewrap").each((index, element) => {
-  //           // 주제 추출
-  //           const topic = $(element)
-  //             .find(".conts_info_list2 ul li:eq(0) > a:eq(1)")
-  //             .text();
-
-  //           // 책소개 추출
-  //           const element2 = $(element)
-  //             .find('.Ere_prod_mconts_LS:contains("책소개")')
-  //             .parent();
-  //           const intro = element2
-  //             .find(".Ere_prod_mconts_R > div")
-  //             .text()
-  //             .trim();
-
-  //           // 추출한 정보를 배열에 추가
-  //           detail.push({
-  //             title,
-  //             author,
-  //             topic,
-  //             intro,
-  //           });
-  //         });
-  //       }
-  //     })
-  //     .then(async () => {
-  //       try {
-  //         // 상세정보 배열 전체를 서버에 전달
-  //         await axios.post("http://localhost:3000/api/post/detail", {
-  //           detail: detail,
-  //         });
-  //       } catch (error) {
-  //         console.log("33");
-  //         // console.error("데이터 전송 중 오류 발생:", error);
-  //       }
-  //     })
-
-  //     // 에러 처리: 크롤링 도중 에러가 발생한 경우
-  //     .catch((error) => {
-  //       console.log("44");
-  //       // console.error("크롤링 도중 에러 발생:", error);
-  //     });
-  // }
+  await Promise.all(bestsellersPromises).then(async () => {
+    await axios.post("http://localhost:3000/api/post/bestSellers", bestsellers);
+  });
 
   // db 접근
   const db = (await connectDB).db("books");
   // 데이터 가져오기
   let result = await db.collection("bestSellers").find().toArray();
   let result2 = await db.collection("room").find().toArray();
+
   // 메인페이지 책 랜덤함수
   result = result.slice().sort(() => Math.random() - 0.5);
 
