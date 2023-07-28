@@ -47,11 +47,7 @@ export default function MakeRoom() {
       const width = window.innerWidth * 0.9;
       const height = window.innerHeight * 0.9;
 
-      window.open(
-        `/readingRoom/${id}`,
-        "_blank",
-        `width=${width},height=${height}`
-      );
+      window.location.href = `/readingRoom/${id}`;
     } else {
       console.error("Error:", response.statusText);
     }

@@ -29,15 +29,9 @@ export default function Room({ data }) {
     setCurrentPage(pageNumber);
   };
 
-  // 참여하기 버튼을 누르는 경우 새로운 창 띄우기
-  const openNewWindow = (id) => {
-    const width = window.innerWidth * 0.9;
-    const height = window.innerHeight * 0.9;
-    window.open(
-      `/readingRoom/${id}`,
-      "_blank",
-      `width=${width},height=${height}`
-    );
+  // 참여하기 버튼을 누르는 경우
+  const moveLocation = (id) => {
+    window.location.href = `/readingRoom/${id}`;
   };
 
   return (
@@ -73,7 +67,7 @@ export default function Room({ data }) {
                 </div>
                 <div
                   className="mates-board-btn"
-                  onClick={() => openNewWindow(item._id)}
+                  onClick={() => moveLocation(item._id)}
                 >
                   <h4>참여하기</h4>
                 </div>
