@@ -35,10 +35,6 @@ export default function Category_image({ data, num, column, country }) {
                     <div className="hover-title">{"<" + item.title + ">"}</div>
                     <div className="hover-intro">{item.intro}</div>
                     <div className="hover-author">{item.author}</div>
-                    <div className="hover-online">
-                      온라인: 3명
-                      <h3 className="hover-btn">참여하기</h3>
-                    </div>
                   </div>
                 )}
               </div>
