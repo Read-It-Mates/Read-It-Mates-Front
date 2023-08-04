@@ -99,7 +99,7 @@ export default function Sign() {
             <div className="error">패스워드가 일치하지 않습니다.</div>
           )}
 
-          <button className="submitButton" type="submit">
+          <button className="submitButton2" type="submit">
             회원가입
           </button>
         </form>

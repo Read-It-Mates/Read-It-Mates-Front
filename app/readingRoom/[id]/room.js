@@ -3,12 +3,21 @@ import React, { useState, useEffect } from "react";
 import { TbDirectionHorizontal } from "react-icons/tb";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import { GrFormClose } from "react-icons/gr";
-export default function Room({ data }) {
+export default function Room({ data, session }) {
   const [message, setMessage] = useState(""); // 입력메시지
   const [chat, setChat] = useState([]); //메시지 배열
   const [showInfo, setShowInfo] = useState(true); //책정보와 참여자목록을 전환하는 state
   const [sidebarHidden, setSidebarHidden] = useState(false); // 사이드바 숨김 여부 설정
-  const [isFullScreen, setIsFullScreen] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(true); // 전체화면 상태
+  const [maxIndex, setMaxIndex] = useState(-1); // 참여자 인원 상태
+
+  // 참여자 인원 상태 함수
+  useEffect(() => {
+    if (data && data.participants) {
+      setMaxIndex(data.participants.length - 1);
+    }
+  }, [data]);
+
   // 사이드바 숨김 여부 함수
   const toggleSidebar = () => {
     setSidebarHidden(!sidebarHidden);
@@ -104,7 +113,11 @@ export default function Room({ data }) {
             </button>
           </div>
           <div className="room-header">
-            {showInfo ? <h2>책 정보</h2> : <h2>참여자 목록</h2>}
+            {showInfo ? (
+              <h2>책 정보</h2>
+            ) : (
+              <h2>참여자 목록&nbsp;({maxIndex + 1}명)</h2>
+            )}
           </div>
           {showInfo ? (
             <div className="bookInfo">
@@ -116,9 +129,26 @@ export default function Room({ data }) {
             </div>
           ) : (
             <div className="participantList">
-              <p>name1</p>
-              <p>name2</p>
-              <p>name3</p>
+              {data.participants.map((item, index) =>
+                index === 0 ? (
+                  <div
+                    key={index}
+                    className="participant"
+                    style={{ width: "fit-content" }}
+                  >
+                    {item}&nbsp;
+                    <span className="room-Leader">방장</span>
+                  </div>
+                ) : (
+                  <div
+                    key={index}
+                    className="participant"
+                    style={{ width: "fit-content" }}
+                  >
+                    {item}
+                  </div>
+                )
+              )}
             </div>
           )}
         </div>

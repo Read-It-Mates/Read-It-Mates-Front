@@ -6,6 +6,45 @@ export default function Room({ data }) {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
   const [result, setResult] = useState([]); // 결과 데이터 상태
   const itemsPerPage = 7; // 페이지 당 표시되는 항목 수
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
+  const [searchOption, setSearchOption] = useState("board"); // 검색 옵션 상태 (기본값: "board")
+
+  // 검색 값이 변경될 때 상태를 업데이트하는 이벤트 핸들러
+  const handleSearchOptionChange = (event) => {
+    setSearchOption(event.target.value);
+  };
+
+  const handleSearchInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // 검색 기능에서 enter를 누른경우
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      search();
+    }
+  };
+
+  // 검색 기능을 구현하는 함수
+  const search = () => {
+    const filteredResult = data.filter((item) => {
+      switch (searchOption) {
+        case "board":
+          return item.roomTitle
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        case "title":
+          return item.bookTitle
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        case "genre":
+          return item.category.toLowerCase().includes(searchTerm.toLowerCase());
+        default:
+          return true;
+      }
+    });
+    setResult(filteredResult);
+  };
 
   // 페이지 변경에 따른 데이터 변경
   useEffect(() => {
@@ -63,7 +102,7 @@ export default function Room({ data }) {
                   <h4>{item.category}</h4>
                 </div>
                 <div className="mates-board-number">
-                  <h4>11/32</h4>
+                  <h4>0/{item.participants.length}</h4>
                 </div>
                 <div
                   className="mates-board-btn"
@@ -77,14 +116,23 @@ export default function Room({ data }) {
         </div>
         <div className="mates-board-bottom">
           <div className="search-container2">
-            <input className="search-input2" type="text" placeholder="검색" />
+            <input
+              className="search-input2"
+              type="text"
+              placeholder="검색"
+              onChange={handleSearchInputChange}
+            />
             <div className="search-options-container">
-              <select className="search-options" name="search-option">
-                <option value="board" selected>
-                  방 제목
+              <select
+                className="search-options"
+                name="search-option"
+                onChange={handleSearchOptionChange}
+              >
+                <option value="title" selected>
+                  책 제목
                 </option>
-                <option value="title">책 제목</option>
-                <option value="title">장르</option>
+                <option value="board">방 제목</option>
+                <option value="genre">장르</option>
               </select>
             </div>
           </div>
@@ -105,14 +153,24 @@ export default function Room({ data }) {
             <span onClick={() => changePage(currentPage + 1)}>right</span>
           </div>
           <div className="search-container">
-            <input className="search-input2" type="text" placeholder="검색" />
+            <input
+              className="search-input2"
+              type="text"
+              placeholder="검색"
+              onChange={handleSearchInputChange}
+              onKeyDown={handleKeyDown}
+            />
             <div className="search-options-container">
-              <select className="search-options" name="search-option">
-                <option value="board" selected>
-                  방 제목
+              <select
+                className="search-options"
+                name="search-option"
+                onChange={handleSearchOptionChange}
+              >
+                <option value="title" selected>
+                  책 제목
                 </option>
-                <option value="title">책 제목</option>
-                <option value="title">장르</option>
+                <option value="board">방 제목</option>
+                <option value="genre">장르</option>
               </select>
             </div>
           </div>

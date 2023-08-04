@@ -10,6 +10,9 @@ export default async function handler(req, res) {
     if (req.body.bookTitle == "") {
       return res.status(400).json("책제목을 입력해주세요.");
     }
+    if (req.body.participants == null) {
+      return res.status(400).json("로그인 후 이용해주세요.");
+    }
 
     const db = (await connectDB).db("books");
     const countersCollection = db.collection("counters");
