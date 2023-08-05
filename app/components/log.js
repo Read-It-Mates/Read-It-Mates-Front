@@ -2,35 +2,37 @@
 import Link from "next/link";
 import { RiLoginBoxLine } from "react-icons/ri";
 import { signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Session({ session }) {
+  const router = useRouter();
+  const handleButtonClick = () => {
+    router.push("/sign");
+  };
   return (
     <div>
       {session != null ? (
-        <span
-          className="logout-btn"
+        <button
+          className="user-name"
           onClick={() => {
             signOut();
           }}
         >
-          <RiLoginBoxLine />
-          log-Out&nbsp;&nbsp;&nbsp;
-        </span>
+          로그아웃
+        </button>
       ) : (
         <div>
-          <span
-            className="logout-btn"
+          <button className="user-name" onClick={handleButtonClick}>
+            회원가입
+          </button>
+          <button
+            className="user-name"
             onClick={() => {
               signIn();
             }}
           >
-            <RiLoginBoxLine />
-            log-In&nbsp;&nbsp;&nbsp;
-          </span>
-          <Link href="/sign" className="r-link">
-            <RiLoginBoxLine />
-            sign-In
-          </Link>
+            로그인
+          </button>
         </div>
       )}
     </div>

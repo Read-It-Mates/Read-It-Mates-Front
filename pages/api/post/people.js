@@ -4,5 +4,5 @@ export default async function handler(req, res) {
   let name = JSON.parse(req.body);
   // MongoDB 연결
   const db = (await connectDB).db("books");
-  await db.collection("people").insertOne({ name: name });
+  await db.collection("room").insertOne({ name: name });
 }

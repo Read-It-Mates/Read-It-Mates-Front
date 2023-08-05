@@ -10,18 +10,8 @@ export default async function Session() {
   return (
     <div className="navbar-r">
       <Log session={session} />
-      {session != null ? (
-        <Link href="/mypage" className="r-link">
-          <CgProfile />
-          mypage
-        </Link>
-      ) : null}
 
-      {session != null ? (
-        <button>{session.user.name}</button>
-      ) : (
-        <button>비회원</button>
-      )}
+      {session != null ? <button className="user-name">My</button> : null}
     </div>
   );
 }

@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const booksArray = req.body;
   if (req.method == "POST") {
     const db = (await connectDB).db("books");
-    const bestCollection = db.collection("bestSellers");
+    const bestCollection = db.collection("bestSellers2");
 
     // 변경된 베스트셀러를 추적하기 위한 플래그
     let isBestSellerUpdated = false;

@@ -1,24 +1,25 @@
 import { connectDB } from "/util/database";
+import Grid from "../components/grid";
 
-export default async function Japanese() {
+export default async function Domestic() {
   const db = (await connectDB).db("books");
-  let result = await db.collection("steadySellers").find().toArray();
-
+  let result = await db.collection("bestSellers3").find().toArray();
+  const categories = [
+    "라이트노벨",
+    "만화/애니/피규어",
+    "문학",
+    "실용서",
+    "엔터테이먼트",
+    "유아/어린이",
+    "일반과학",
+    "일반사회",
+    "일본잡지",
+    "컴퓨터",
+    "학습",
+  ];
   return (
-    <div className="container">
-      {result.map((item, index) => {
-        return (
-          <div className="bookItem" key={index}>
-            <h4 className="title">
-              {item.index + ". "}
-              {item.title}
-              <br></br>
-              {" - " + item.author + " - "}
-            </h4>
-            <img className="coverImage2" src={item.image} alt=""></img>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <Grid result={result} categories={categories} />
+    </>
   );
 }

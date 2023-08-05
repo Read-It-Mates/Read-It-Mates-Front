@@ -19,7 +19,7 @@ export default function Sign() {
 
   // 닉네임 변경 감지 및 형식 확인
   useEffect(() => {
-    const reNickname = /^[a-z\d]{4,12}$/i;
+    const reNickname = /^[a-zA-Z가-힣0-9]{4,12}$/;
     setValidity({ ...validity, name: reNickname.test(formValues.name) });
   }, [formValues.name]);
 
