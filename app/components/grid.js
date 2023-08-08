@@ -38,7 +38,7 @@ export default function Grid({ result, categories, onCategoryChange }) {
             return (
               <div className="bookItem" key={index}>
                 <h4 className="title">
-                  {item.index + ". "}
+                  {index + 1 + ". "}
                   {item.title}
                   <br></br>
                   {" - " + item.author + " - "}
