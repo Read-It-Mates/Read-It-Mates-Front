@@ -7,6 +7,7 @@ export default function Category_image({
   column,
   country,
   category,
+  hover,
 }) {
   // 이미지 useRef
   const coverImageRefs = useRef(data.map(() => React.createRef()));
@@ -35,20 +36,24 @@ export default function Category_image({
                 {index === hoverIndex && (
                   <div
                     className={
-                      country !== "일본도서"
-                        ? "hover-container"
-                        : "hover-container2"
+                      hover !== false ? "hover-container" : "hover-container2"
                     }
                   >
                     <div className="hover-index">
-                      <div className="hover-jenre">{item.category + " 』"}</div>
+                      <div className="hover-jenre">
+                        {item.category ? item.category + " 』" : "미정"}
+                      </div>
                       {item.index + "위"}
                     </div>
                     <div className="hover-title">{"<" + item.title + ">"}</div>
 
-                    <div className="hover-intro">{item.intro}</div>
+                    <div className="hover-intro">
+                      {item.intro ? item.intro : null}
+                    </div>
 
-                    <div className="hover-author">{item.author}</div>
+                    <div className="hover-author">
+                      {item.author ? item.author : null}
+                    </div>
                   </div>
                 )}
               </div>

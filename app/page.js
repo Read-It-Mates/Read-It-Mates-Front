@@ -10,6 +10,12 @@ export default async function Home() {
   let result = await db.collection("bestSellers").find().toArray();
   let result2 = await db.collection("bestSellers2").find().toArray();
   let result3 = await db.collection("bestSellers3").find().toArray();
+  let result4 = await db.collection("steadySellers").find().toArray();
+  let result5 = await db.collection("steadySellers2").find().toArray();
+  let result6 = await db.collection("steadySellers3").find().toArray();
+  let result7 = await db.collection("newBook").find().toArray();
+  let result8 = await db.collection("newBook2").find().toArray();
+  let result9 = await db.collection("newBook3").find().toArray();
 
   let room = await db.collection("room").find().toArray();
 
@@ -17,6 +23,12 @@ export default async function Home() {
   result = result.slice().sort(() => Math.random() - 0.5);
   result2 = result2.slice().sort(() => Math.random() - 0.5);
   result3 = result3.slice().sort(() => Math.random() - 0.5);
+  result4 = result4.slice().sort(() => Math.random() - 0.5);
+  result5 = result5.slice().sort(() => Math.random() - 0.5);
+  result6 = result6.slice().sort(() => Math.random() - 0.5);
+  result7 = result7.slice().sort(() => Math.random() - 0.5);
+  result8 = result8.slice().sort(() => Math.random() - 0.5);
+  result9 = result9.slice().sort(() => Math.random() - 0.5);
 
   // 정렬용 props
   let gridNum = 9;
@@ -32,8 +44,10 @@ export default async function Home() {
   let country1 = "국내도서";
   let country2 = "서양도서";
   let country3 = "일본도서";
-  let country4 = "해외도서";
 
+  // 책 정보 디자인 props
+  let hoverBox1 = true;
+  let hoverBox2 = false;
   return (
     <>
       <SideBar />
@@ -54,6 +68,7 @@ export default async function Home() {
               column={columnNum}
               country={country1}
               category={category1}
+              hover={hoverBox1}
             />
             <Category_image
               data={result2}
@@ -61,6 +76,7 @@ export default async function Home() {
               column={columnNum}
               country={country2}
               category={category1}
+              hover={hoverBox1}
             />
             <Category_image
               data={result3}
@@ -68,6 +84,7 @@ export default async function Home() {
               column={columnNum}
               country={country3}
               category={category1}
+              hover={hoverBox2}
             />
           </div>
         </div>
@@ -78,25 +95,28 @@ export default async function Home() {
         <div className="kind-container2">
           <div className="main-container">
             <Category_image
-              data={result}
+              data={result4}
               num={gridNum}
               column={columnNum}
               country={country1}
               category={category2}
+              hover={hoverBox1}
             />
             <Category_image
-              data={result2}
+              data={result5}
               num={gridNum}
               column={columnNum}
               country={country2}
               category={category2}
+              hover={hoverBox1}
             />
             <Category_image
-              data={result3}
+              data={result6}
               num={gridNum}
               column={columnNum}
               country={country3}
               category={category2}
+              hover={hoverBox2}
             />
           </div>
         </div>
@@ -107,25 +127,28 @@ export default async function Home() {
         <div className="kind-container3">
           <div className="main-container">
             <Category_image
-              data={result}
+              data={result7}
               num={gridNum}
               column={columnNum}
               country={country1}
               category={category3}
+              hover={hoverBox1}
             />
             <Category_image
-              data={result2}
+              data={result8}
               num={gridNum}
               column={columnNum}
               country={country2}
               category={category3}
+              hover={hoverBox2}
             />
             <Category_image
-              data={result3}
+              data={result9}
               num={gridNum}
               column={columnNum}
               country={country3}
               category={category3}
+              hover={hoverBox2}
             />
           </div>
         </div>
