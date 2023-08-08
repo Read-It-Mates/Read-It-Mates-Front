@@ -82,7 +82,7 @@ export default function Search() {
       />
       {bookSuggestions.length > 0 && (
         <ul id="suggestions2">
-          {bookSuggestions.map((book) => (
+          {bookSuggestions.slice(0, 10).map((book) => (
             <li
               key={book._id}
               onClick={() => {

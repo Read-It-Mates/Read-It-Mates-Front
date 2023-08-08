@@ -83,7 +83,7 @@ export default function Make({ session }) {
           </div>
           {bookSuggestions.length > 0 && (
             <ul id="suggestions">
-              {bookSuggestions.map((book) => (
+              {bookSuggestions.slice(0, 10).map((book) => (
                 <li
                   key={book._id}
                   onClick={() => {

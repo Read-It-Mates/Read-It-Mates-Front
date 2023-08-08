@@ -11,11 +11,15 @@ function CategoryButton({ label, isSelected, onClick }) {
   );
 }
 
-export default function Grid({ result, categories }) {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const onCategoryClick = useCallback((category) => {
-    setSelectedCategory(category);
-  }, []);
+export default function Grid({ result, categories, onCategoryChange }) {
+  const [selectedCategory, setSelectedCategory] = useState("종합");
+  const onCategoryClick = useCallback(
+    (category) => {
+      setSelectedCategory(category);
+      onCategoryChange(category);
+    },
+    [onCategoryChange]
+  );
   return (
     <>
       <div className="button-grid">
