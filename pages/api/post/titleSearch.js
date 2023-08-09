@@ -314,8 +314,16 @@ export default async function handler(req, res) {
       ...bestSellers3_11,
     ];
 
+    // 책 중복 제거
+    const duplicatesRemoved = books.reduce((accumulator, current) => {
+      if (!accumulator.find((book) => book.title === current.title)) {
+        accumulator.push(current);
+      }
+      return accumulator;
+    }, []);
+
     // 응답
-    res.status(200).json(books);
+    res.status(200).json(duplicatesRemoved);
   } else {
     res.status(404).json({ error: "Invalid request" });
   }

@@ -8,6 +8,7 @@ export default function Make({ session }) {
   const [selectedAuthor, setSelectedAuthor] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
+  const [focused, setFocused] = useState(false);
 
   const newPost = {
     roomTitle: roomTitle,
@@ -79,11 +80,13 @@ export default function Make({ session }) {
               onChange={(event) => setBookTitle(event.target.value)}
               // placeholder="책 제목을 입력해주세요."
               autoComplete="off"
+              onFocus={() => setFocused(true)}
+              onBlur={() => setTimeout(() => setFocused(false), 200)}
             />
           </div>
-          {bookSuggestions.length > 0 && (
+          {bookSuggestions.length > 0 && focused && (
             <ul id="suggestions">
-              {bookSuggestions.slice(0, 10).map((book) => (
+              {bookSuggestions.map((book) => (
                 <li
                   key={book._id}
                   onClick={() => {

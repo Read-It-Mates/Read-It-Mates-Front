@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import { TbDirectionHorizontal } from "react-icons/tb";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import { GrFormClose } from "react-icons/gr";
+import DeleteModal from "@/app/components/deleteModal";
+import { useRouter } from "next/navigation";
+
 export default function Room({ data, session }) {
   const [message, setMessage] = useState(""); // 입력메시지
   const [chat, setChat] = useState([]); //메시지 배열
@@ -10,6 +13,66 @@ export default function Room({ data, session }) {
   const [sidebarHidden, setSidebarHidden] = useState(false); // 사이드바 숨김 여부 설정
   const [isFullScreen, setIsFullScreen] = useState(true); // 전체화면 상태
   const [maxIndex, setMaxIndex] = useState(-1); // 참여자 인원 상태
+  const [isEditMode, setIsEditMode] = useState(false); // 수정모드 상태
+  const [roomTitle, setRoomTitle] = useState(data.roomTitle);
+  const [bookTitle, setBookTitle] = useState(data.bookTitle);
+  const [bookSuggestions, setBookSuggestions] = useState([]);
+  const [selectedAuthor, setSelectedAuthor] = useState(data.author);
+  const [selectedCategory, setSelectedCategory] = useState(data.category);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(data.image);
+  const [focused, setFocused] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
+
+  const idPost = {
+    _id: data._id,
+  };
+
+  // 리딩룸 삭제 함수
+  const onDelete = async () => {
+    await fetch("/api/post/roomDelete", {
+      method: "POST",
+      body: JSON.stringify(idPost),
+    });
+    router.push("/");
+  };
+
+  // 리딩룸 수정시 변경값
+  const newPost = {
+    roomTitle: roomTitle,
+    bookTitle: bookTitle,
+    author: selectedAuthor,
+    image: selectedImageUrl,
+    category: selectedCategory,
+    _id: data._id,
+  };
+
+  // 리딩룸 수정 함수
+  const handleUpdate = async () => {
+    await fetch("/api/post/roomUpdate", {
+      method: "POST",
+      body: JSON.stringify(newPost),
+    });
+    window.location.reload();
+  };
+
+  // 방 수정시 책 목록 띄우는 함수
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (bookTitle) {
+        fetch(`/api/post/titleSearch?term=${encodeURIComponent(bookTitle)}`)
+          .then((response) => response.json())
+          .then((books) => {
+            setBookSuggestions(books);
+          })
+          .catch((error) => {});
+      } else {
+        setBookSuggestions([]);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [bookTitle]);
 
   // 참여자 인원 상태 함수
   useEffect(() => {
@@ -114,18 +177,126 @@ export default function Room({ data, session }) {
           </div>
           <div className="room-header">
             {showInfo ? (
-              <h2>책 정보</h2>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <h2>책 정보</h2>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <h4
+                    className="toggleButton2"
+                    onClick={() => setIsEditMode(!isEditMode)}
+                  >
+                    변경
+                  </h4>
+                  &nbsp;
+                  <h4 className="toggleButton2" onClick={onDelete}>
+                    삭제
+                  </h4>
+                  <DeleteModal
+                    show={showModal}
+                    onClose={() => setShowModal(false)}
+                    onConfirm={onDelete}
+                  />
+                </div>
+              </div>
             ) : (
               <h2>참여자 목록&nbsp;({maxIndex + 1}명)</h2>
             )}
           </div>
           {showInfo ? (
             <div className="bookInfo">
-              <p>{data.roomTitle}</p>
-              <p>책제목: {data.bookTitle}</p>
-              <p>분야: {data.category}</p>
-              <p>저자: {data.author}</p>
-              <img className="coverImage4" src={data.image} alt="이미지"></img>
+              {isEditMode ? (
+                <>
+                  <input
+                    type="text"
+                    id="roomTitle"
+                    value={roomTitle}
+                    onChange={(event) => setRoomTitle(event.target.value)}
+                    autoComplete="off"
+                    className="big-Category"
+                    placeholder="방 제목을 입력해주세요."
+                  />
+                  <div className="bookTitleWrapper">
+                    <span className="span-Category">책제목: </span>
+                    <input
+                      type="text"
+                      id="bookTitle"
+                      value={bookTitle}
+                      onChange={(event) => setBookTitle(event.target.value)}
+                      autoComplete="off"
+                      className="small-Category"
+                      placeholder="책 제목을 입력해주세요."
+                      onFocus={() => setFocused(true)}
+                      onBlur={() => setTimeout(() => setFocused(false), 200)}
+                    />
+
+                    {bookSuggestions.length > 0 && focused && (
+                      <ul id="suggestions3">
+                        {bookSuggestions.map((book) => (
+                          <li
+                            key={book._id}
+                            onClick={() => {
+                              setBookTitle(book.title);
+                              setSelectedAuthor(book.author); // 저자를 선택된 책의 저자로 설정.
+                              setSelectedCategory(book.category); // 카테고리를 선택된 책의 카테고리로 설정.
+                              setSelectedImageUrl(book.image); // 이미지 주소를 선택된 책의 이미지 주소로 설정.
+                              setBookSuggestions([]); // 선택된 데이터 처리 후 목록을 지움.
+                            }}
+                          >
+                            {book.title}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                  <p className="small-Category">분야: {selectedCategory}</p>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
+                    <span className="small-Category">
+                      저자: {selectedAuthor}
+                    </span>
+                    <button onClick={handleUpdate} className="button-Category">
+                      변경하기
+                    </button>
+                  </div>
+                  <img
+                    className="coverImage4"
+                    src={selectedImageUrl}
+                    alt="이미지"
+                  ></img>
+                </>
+              ) : (
+                <>
+                  <span className="big-Category">{data.roomTitle}</span>
+                  <span className="small-Category">
+                    책제목: {data.bookTitle}
+                  </span>
+                  <span className="small-Category">분야: {data.category}</span>
+                  <span className="small-Category">저자: {data.author}</span>
+                  <img
+                    className="coverImage4"
+                    src={data.image}
+                    alt="이미지"
+                  ></img>
+                </>
+              )}
             </div>
           ) : (
             <div className="participantList">

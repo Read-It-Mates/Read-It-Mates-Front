@@ -12,6 +12,7 @@ export default function Search() {
   const [bookSuggestions, setBookSuggestions] = useState([]);
   const router = useRouter();
   const [isMoving, setIsMoving] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   const handleSuggestions = () => {
     setIsMoving(true);
@@ -67,6 +68,7 @@ export default function Search() {
       searchInput.removeEventListener("focus", handleFocus);
     };
   }, []);
+
   return (
     <div className="navbar-l">
       <Link href="/">
@@ -79,10 +81,12 @@ export default function Search() {
         value={bookTitle}
         onChange={(event) => setBookTitle(event.target.value)}
         autoComplete="off"
+        onFocus={() => setFocused(true)}
+        onBlur={() => setTimeout(() => setFocused(false), 200)}
       />
-      {bookSuggestions.length > 0 && (
+      {bookSuggestions.length > 0 && focused && (
         <ul id="suggestions2">
-          {bookSuggestions.slice(0, 10).map((book) => (
+          {bookSuggestions.map((book) => (
             <li
               key={book._id}
               onClick={() => {
