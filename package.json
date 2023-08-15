@@ -16,6 +16,7 @@
     "cheerio": "^1.0.0-rc.12",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
+    "global": "^4.4.0",
     "iconv-lite": "^0.6.3",
     "keen-slider": "^6.8.6",
     "mongodb": "^5.7.0",
@@ -28,6 +29,9 @@
     "react-fullpage": "^0.1.19",
     "react-icons": "^4.10.1",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-scripts": "^5.0.1",
+    "socket.io-client": "^4.7.2",
+    "sockjs-client": "^1.6.1",
     "swiper": "^10.0.4",
     "tailwindcss": "^3.3.2"
   }

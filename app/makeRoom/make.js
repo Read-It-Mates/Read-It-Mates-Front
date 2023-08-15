@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Make({ session }) {
   const [roomTitle, setRoomTitle] = useState("");
@@ -8,7 +9,6 @@ export default function Make({ session }) {
   const [selectedAuthor, setSelectedAuthor] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
-  const [focused, setFocused] = useState(false);
 
   const newPost = {
     roomTitle: roomTitle,
@@ -44,12 +44,40 @@ export default function Make({ session }) {
       method: "POST",
       body: JSON.stringify(newPost),
     });
+
     if (response.ok) {
+      console.log("실행중입니다??");
+      console.log(
+        roomTitle +
+          "-" +
+          bookTitle +
+          "-" +
+          selectedAuthor +
+          "-" +
+          selectedCategory
+      );
       const id = await response.json();
       const width = window.innerWidth * 0.9;
       const height = window.innerHeight * 0.9;
-
-      window.location.href = `/readingRoom/${id}`;
+      // Axios를 사용하여 데이터를 스프링 서버로 전달합니다.
+      axios
+        .post("/readit/reading/room", {
+          roomTitle: roomTitle,
+          bookTitle: bookTitle,
+          bookWriter: selectedAuthor,
+          bookImg: selectedImageUrl,
+          category: selectedCategory,
+          hostId: session.user.name,
+        })
+        .then((response) => {
+          console.log("서버 응답:", response.data);
+          // 서버로부터의 응답에 따라 처리할 로직을 추가합니다.
+          window.location.href = `/readingRoom/${id}`;
+        })
+        .catch((error) => {
+          console.error("에러 발생!!!:", error);
+          // 에러 처리 로직을 추가합니다.
+        });
     } else {
       console.error("Error:", response.statusText);
     }
@@ -80,13 +108,11 @@ export default function Make({ session }) {
               onChange={(event) => setBookTitle(event.target.value)}
               // placeholder="책 제목을 입력해주세요."
               autoComplete="off"
-              onFocus={() => setFocused(true)}
-              onBlur={() => setTimeout(() => setFocused(false), 200)}
             />
           </div>
-          {bookSuggestions.length > 0 && focused && (
+          {bookSuggestions.length > 0 && (
             <ul id="suggestions">
-              {bookSuggestions.map((book) => (
+              {bookSuggestions.slice(0, 10).map((book) => (
                 <li
                   key={book._id}
                   onClick={() => {
