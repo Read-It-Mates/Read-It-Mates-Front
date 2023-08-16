@@ -202,6 +202,7 @@ input {
   position: relative;
   transition: transform 0.3s, box-shadow 0.3s;
   box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.8);
+  cursor: pointer;
 }
 
 .coverImage2 {
@@ -1322,7 +1323,7 @@ input {
   flex: 1;
   margin: 50px;
   padding: 2rem;
-  height: 100vh;
+  height: 80vh;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.7);
@@ -1344,7 +1345,7 @@ input {
 }
 
 .search-image {
-  max-width: 80%;
+  max-width: 65%;
   height: auto;
   display: block;
   border-radius: 6px;
@@ -1573,7 +1574,7 @@ input {
 
 .vertical-line {
   width: 10px;
-  height: 100vh;
+  height: 80vh;
   padding-block: 1rem;
   background-color: #d9d9d9e6;
   border-radius: 12px;
@@ -1589,7 +1590,7 @@ input {
   flex-direction: column;
   justify-content: space-between;
   padding: 2rem;
-  height: 100vh;
+  height: 80vh;
   background-color: #ffffffe6;
   box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.7);
 }
@@ -1651,4 +1652,17 @@ input {
   font-size: 14px;
   color: #666;
   margin-top: 5px;
+}
+
+.no-review-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.no-review-msg {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #777;
 }

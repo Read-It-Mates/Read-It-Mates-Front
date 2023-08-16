@@ -24,9 +24,6 @@ export default function Search() {
         `/searchPage?title=${bookTitle}&author=${selectedAuthor}&category=${selectedCategory}&image=${selectedImage}&intro=${selectedIntro}`
       );
       setIsMoving(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000); // 새로고침이 1초 후 실행되도록
     }
   }, [
     isMoving,

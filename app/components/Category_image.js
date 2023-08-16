@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Category_image({
   data,
@@ -9,6 +10,26 @@ export default function Category_image({
   category,
   hover,
 }) {
+  const router = useRouter();
+
+  // 이미지 클릭 상태
+  const [isMoving, setIsMoving] = useState(false);
+
+  // 이미지 클릭 함수
+  const handleImg = (item) => {
+    setIsMoving(item);
+  };
+
+  // 이미지 클릭시 실행 함수
+  useEffect(() => {
+    if (isMoving) {
+      router.push(
+        `/searchPage?title=${isMoving.title}&author=${isMoving.author}&category=${isMoving.category}&image=${isMoving.image}&intro=${isMoving.intro}`
+      );
+      setIsMoving(false);
+    }
+  }, [isMoving]);
+
   // 이미지 useRef
   const coverImageRefs = useRef(data.map(() => React.createRef()));
   // 이미지 hover 인덱스 체크
@@ -32,6 +53,7 @@ export default function Category_image({
                 key={index}
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(-1)}
+                onClick={() => handleImg(item)}
               >
                 <img
                   ref={coverImageRefs.current[index]}

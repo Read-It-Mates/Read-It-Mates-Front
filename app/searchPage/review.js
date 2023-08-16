@@ -119,26 +119,36 @@ export default function Review({ session }) {
         </div>
         <div>
           <ul className="comment-list" ref={scrollRef}>
-            {/* 불러온 리뷰 데이터 */}
-            {result.map((comment, index) => (
-              <li key={index}>
-                {comment.author.map((author, i) => (
-                  <div className="comment" key={i}>
-                    <p className="comment-author">{author}</p>
-                    <p className="comment-text">{comment.text[i]}</p>
-                  </div>
+            {result.length === 0 && comments.length === 0 ? ( // 불러온 리뷰 데이터와 실시간 리뷰 데이터가 모두 없는 경우
+              <div className="no-review-container">
+                <p className="no-review-msg">
+                  첫 리뷰의 주인공이 되어 명예를 누리세요! 🏆
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* 불러온 리뷰 데이터 */}
+                {result.map((comment, index) => (
+                  <li key={index}>
+                    {comment.author.map((author, i) => (
+                      <div className="comment" key={i}>
+                        <p className="comment-author">{author}</p>
+                        <p className="comment-text">{comment.text[i]}</p>
+                      </div>
+                    ))}
+                  </li>
                 ))}
-              </li>
-            ))}
-            {/* 실시간 리뷰 데이터 */}
-            {comments.map((comment, index) => (
-              <li key={index}>
-                <div className="comment">
-                  <p className="comment-author">{comment.author[0]}:</p>
-                  <p className="comment-text">{comment.text[0]}</p>
-                </div>
-              </li>
-            ))}
+                {/* 실시간 리뷰 데이터 */}
+                {comments.map((comment, index) => (
+                  <li key={index}>
+                    <div className="comment">
+                      <p className="comment-author">{comment.author[0]}:</p>
+                      <p className="comment-text">{comment.text[0]}</p>
+                    </div>
+                  </li>
+                ))}
+              </>
+            )}
           </ul>
 
           <input
