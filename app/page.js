@@ -2,6 +2,8 @@ import { connectDB } from "/util/database";
 import Category_image from "./components/Category_image";
 import Room from "./components/Room";
 import SideBar from "./components/sidebar";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export default async function Home() {
   // db 접근
@@ -48,13 +50,17 @@ export default async function Home() {
   // 책 정보 디자인 props
   let hoverBox1 = true;
   let hoverBox2 = false;
+
+  // 세션확인
+  let session = await getServerSession(authOptions);
+
   return (
     <>
       <SideBar />
       <div className="container4">
         {/* 리딩룸 */}
         <div id="reading-room" className="home-status-container">
-          <Room data={room} />
+          <Room data={room} session={session} />
         </div>
         {/* 베스트셀러 */}
         <div id="best-sellers" className="category-title">

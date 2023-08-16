@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-export default function Room({ data }) {
+export default function Room({ data, session }) {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
   const [result, setResult] = useState([]); // 결과 데이터 상태
   const itemsPerPage = 7; // 페이지 당 표시되는 항목 수
@@ -70,7 +70,11 @@ export default function Room({ data }) {
 
   // 참여하기 버튼을 누르는 경우
   const moveLocation = (id) => {
-    window.location.href = `/readingRoom/${id}`;
+    if (session == null) {
+      window.confirm("로그인 후 이용해주세요.");
+    } else {
+      window.location.href = `/readingRoom/${id}`;
+    }
   };
 
   return (

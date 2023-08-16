@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { TbDirectionHorizontal } from "react-icons/tb";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import { GrFormClose } from "react-icons/gr";
-import DeleteModal from "@/app/components/DeleteModal";
 import { useRouter } from "next/navigation";
 import SockJS from "sockjs-client";
 import axios from "axios";
@@ -42,11 +41,14 @@ export default function Room({ data, session }) {
 
   // 리딩룸 삭제 함수
   const onDelete = async () => {
-    await fetch("/api/post/roomDelete", {
-      method: "POST",
-      body: JSON.stringify(idPost),
-    });
-    router.push("/");
+    const deleteRoom = window.confirm("방을 삭제하시겠습니까?");
+    if (deleteRoom) {
+      await fetch("/api/post/roomDelete", {
+        method: "POST",
+        body: JSON.stringify(idPost),
+      });
+      router.push("/");
+    }
   };
 
   // 리딩룸 수정시 변경값
@@ -61,11 +63,15 @@ export default function Room({ data, session }) {
 
   // 리딩룸 수정 함수
   const handleUpdate = async () => {
-    await fetch("/api/post/roomUpdate", {
-      method: "POST",
-      body: JSON.stringify(newPost),
-    });
-    window.location.reload();
+    const modifyRoom = window.confirm("방을 수정하시겠습니까?");
+    if (modifyRoom) {
+      await fetch("/api/post/roomUpdate", {
+        method: "POST",
+        body: JSON.stringify(newPost),
+      });
+      router.refresh();
+      setIsEditMode(false);
+    }
   };
 
   // 방 수정시 책 목록 띄우는 함수
@@ -238,7 +244,7 @@ export default function Room({ data, session }) {
             // 몽고DB 에서 해당 닉네임을 갖고 있는 데이터 delete하기
 
             // 홈으로 보내기
-            window.history.back();
+            router.push("/");
           }
 
           // 강퇴 당한 대상 외의 사람들이 받게 될 console.log
@@ -316,14 +322,14 @@ export default function Room({ data, session }) {
           userChat: message,
         };
         socket.send(JSON.stringify(socketJson));
-        // setInputMessage();
+        setInputMessage();
       }
     }
   };
 
   // 강퇴
-  function kick(item) {
-    const confirmed = window.confirm(`"${item}"을(를) 강퇴하시겠습니까?`);
+  async function kick(item) {
+    const confirmed = window.confirm(`"${item}"님을(를) 강퇴하시겠습니까?`);
     console.log(`Kick button clicked for ${item}`);
     // leave 버튼 클릭 시 수행할 작업
     if (confirmed) {
@@ -333,6 +339,36 @@ export default function Room({ data, session }) {
         kickNick: item,
       };
       socket.send(JSON.stringify(socketJson));
+
+      // 서버를 통해 삭제할 값을 넘김
+      await fetch("/api/post/userLeave", {
+        method: "POST",
+        body: JSON.stringify({ _id: data._id, userName: item }),
+      });
+      router.refresh();
+    }
+  }
+
+  // 위임
+  async function leader(item) {
+    const confirmed = window.confirm(`"${item}"님을(를) 위임하시겠습니까?`);
+    console.log(`Leader button clicked for ${item}`);
+    // Leader 버튼 클릭 시 수행할 작업
+    if (confirmed) {
+      console.log(`"${item}"을(를) 위임합니다.`);
+      // 강퇴 수행할 작업
+      const socketJson = {
+        leaderNick: item,
+      };
+      socket.send(JSON.stringify(socketJson));
+
+      // 서버를 통해 위임할 값을 넘김
+      await fetch("/api/post/userLeader", {
+        method: "POST",
+        body: JSON.stringify({ _id: data._id, userName: item }),
+      });
+      setUserHost(item);
+      router.refresh();
     }
   }
 
@@ -367,29 +403,33 @@ export default function Room({ data, session }) {
   // [방나가기. 방식1] 방 나가기 버튼 생성 및 기능 구현(방 나가기 버튼 클릭시, 참여목록에서 제외됩니다.)
   // 1. 방을 나간 순간, DB 에서 해당 닉네임을 갖는 정보를 삭제
   // 2. data 에 변화가 생기면 방에 있는 다른 사람에게 알리거나, 목록화면 다시 랜더링
-  // async function exitRoom() {
-  //   const confirmed = window.confirm("정말로 방을 나가시겠습니까?");
-  //   if (confirmed) {
-  //     await fetch("/api/post/userLeave", { // API 엔드포인트를 호출하여 사용자가 나간 정보를 백엔드에 알립니다.
-  //       method: "POST",
-  //       body: JSON.stringify({ roomId: data._id, userName: session.user.name }),
-  //       headers: { "Content-Type": "application/json" },
-  //     });
-
-  //     window.history.back();
-  //   }
-  // }
-
-  // [방나가기. 방식2] 뒤로가기나 다른 곳을 누르지 않고 직접 나가기(참여목록에서 제외 X)
-  function exitRoom() {
+  async function exitRoom() {
     const confirmed = window.confirm("정말로 방을 나가시겠습니까?");
     if (confirmed) {
-      window.history.back();
+      await fetch("/api/post/userLeave", {
+        // API 엔드포인트를 호출하여 사용자가 나간 정보를 백엔드에 알립니다.
+        method: "POST",
+        body: JSON.stringify({ _id: data._id, userName: session.user.name }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      router.push("/");
     }
   }
 
+  // [방나가기. 방식2] 뒤로가기나 다른 곳을 누르지 않고 직접 나가기(참여목록에서 제외 X)
+  // function exitRoom() {
+  //   const confirmed = window.confirm("정말로 방을 나가시겠습니까?");
+  //   if (confirmed) {
+  //     router.push("/");
+  //   }
+  // }
+
+  // 창 높이
+  const height = window.innerHeight;
+
   return (
-    <div className="readingRoom">
+    <div style={{ height: height }} className="readingRoom">
       <div
         className="chatSpace"
         style={{ width: sidebarHidden ? "98.5%" : "80%" }}
@@ -406,16 +446,46 @@ export default function Room({ data, session }) {
         <ul className="chatList">
           {loadChat.map((my, index) => {
             return (
-              <li key={index} className="chatMessage">
-                <div className="messageBubble">{my.userNick}</div>
-                <div className="messageBubble">{my.userChat}</div>
+              <li
+                key={index}
+                className={
+                  userHost !== session.user.name
+                    ? "chatMessage"
+                    : "chatMessage2"
+                }
+              >
+                {userHost !== session.user.name ? (
+                  <>
+                    <div className="nickBubble">{my.userNick}</div>
+                    <div className="messageBubble">{my.userChat}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="messageBubble">{my.userChat}</div>
+                    <div className="nickBubble">{my.userNick}</div>
+                  </>
+                )}
               </li>
             );
           })}
           {chat.map((msg, index) => (
-            <li key={index} className="chatMessage">
-              <div className="messageBubble">{msg.userNick}</div>
-              <div className="messageBubble">{msg.userChat}</div>
+            <li
+              key={index}
+              className={
+                userHost !== session.user.name ? "chatMessage" : "chatMessage2"
+              }
+            >
+              {userHost !== session.user.name ? (
+                <>
+                  <div className="nickBubble">{msg.userNick}</div>
+                  <div className="messageBubble">{msg.userChat}</div>
+                </>
+              ) : (
+                <>
+                  <div className="messageBubble">{msg.userChat}</div>
+                  <div className="nickBubble">{msg.userNick}</div>
+                </>
+              )}
             </li>
           ))}
         </ul>
@@ -439,7 +509,7 @@ export default function Room({ data, session }) {
               <GrFormClose size={"2rem"} />
             </h4>
             <button onClick={toggleInfo} className="toggleButton">
-              {showInfo ? "참여자 목록 보기" : "책 정보 보기"}
+              {showInfo ? "참여자 목록 보기" : "도서 정보 보기"}
             </button>
           </div>
           <div className="room-header">
@@ -449,36 +519,47 @@ export default function Room({ data, session }) {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  alignItems: "center",
                   width: "100%",
                 }}
               >
-                <h2>책 정보</h2>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <h4
-                    className="toggleButton2"
-                    onClick={() => setIsEditMode(!isEditMode)}
+                <h2>도서 정보</h2>
+                {/* 방장만이 방의 수정 및 삭제 권한을 가진다. */}
+                {data.participants[0] == session.user.name ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
                   >
-                    변경
-                  </h4>
-                  &nbsp;
-                  <h4 className="toggleButton2" onClick={onDelete}>
-                    삭제
-                  </h4>
-                  <DeleteModal
-                    show={showModal}
-                    onClose={() => setShowModal(false)}
-                    onConfirm={onDelete}
-                  />
-                </div>
+                    <h4
+                      className="toggleButton2"
+                      onClick={() => setIsEditMode(!isEditMode)}
+                    >
+                      변경
+                    </h4>
+                    &nbsp;
+                    <h4 className="toggleButton2" onClick={onDelete}>
+                      삭제
+                    </h4>
+                  </div>
+                ) : null}
               </div>
             ) : (
-              <h2>참여자 목록&nbsp;({maxIndex + 1}명)</h2>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
+                <h2>참여자 목록&nbsp;({maxIndex + 1}명) </h2>
+                <h4 onClick={exitRoom} className="toggleButton2">
+                  방 나가기
+                </h4>
+              </div>
             )}
           </div>
           {showInfo ? (
@@ -586,12 +667,18 @@ export default function Room({ data, session }) {
                     className="participant"
                     style={{ width: "fit-content" }}
                   >
-                    {item}&nbsp;
-                    <span className="room-Leader">방장 </span>&nbsp;
                     {isOnline ? (
-                      <span className="online">&nbsp; 온라인</span>
+                      <div>
+                        {item}&nbsp;
+                        <span className="room-Leader">방장 </span>
+                        <span className="online"> ON</span>
+                      </div>
                     ) : (
-                      <span className="offline">&nbsp;오프라인</span>
+                      <div>
+                        {item}&nbsp;
+                        <span className="room-Leader">방장 </span>
+                        <span className="offline"> OFF</span>
+                      </div>
                     )}
                   </div>
                 ) : (
@@ -600,22 +687,33 @@ export default function Room({ data, session }) {
                     className="participant"
                     style={{ width: "fit-content" }}
                   >
-                    {userHost === session.user.name ? (
-                      <button onClick={() => kick(item)}>{item}</button>
-                    ) : (
-                      <span>{item}</span>
-                    )}
                     {isOnline ? (
-                      <span className="online">&nbsp;&nbsp;온라인</span>
+                      <div>
+                        <span>{item}</span>
+                        <span className="online">ON</span>
+                      </div>
                     ) : (
-                      <span className="offline">&nbsp;&nbsp;오프라인</span>
+                      <div>
+                        <span>{item}</span>
+                        <span className="offline">OFF</span>
+                      </div>
                     )}
+                    {userHost === session.user.name ? (
+                      <div>
+                        <span
+                          className="Leader-name"
+                          onClick={() => leader(item)}
+                        >
+                          위임하기
+                        </span>
+                        <span className="kick-name" onClick={() => kick(item)}>
+                          강퇴하기
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
                 );
               })}
-              <button onClick={exitRoom} className="exitRoomButton">
-                방 나가기
-              </button>
             </div>
           )}
         </div>
