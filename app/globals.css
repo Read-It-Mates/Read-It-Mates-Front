@@ -1592,7 +1592,6 @@ input {
   height: 100vh;
   background-color: #ffffffe6;
   box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.7);
-  overflow-y: auto;
 }
 
 .comments-title {
@@ -1631,6 +1630,8 @@ input {
 .comment-list {
   list-style-type: none;
   margin-top: 20px;
+  max-height: 75vh;
+  overflow-y: auto;
 }
 
 .comment-list .comment {
