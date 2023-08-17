@@ -406,6 +406,13 @@ export default function Room({ data, session }) {
   async function exitRoom() {
     const confirmed = window.confirm("정말로 방을 나가시겠습니까?");
     if (confirmed) {
+      // 강퇴 수행할 작업
+      const socketJson = {
+        kickNick: session.user.name,
+      };
+      socket.send(JSON.stringify(socketJson));
+
+      // 서버를 통해 삭제할 값을 넘김
       await fetch("/api/post/userLeave", {
         // API 엔드포인트를 호출하여 사용자가 나간 정보를 백엔드에 알립니다.
         method: "POST",

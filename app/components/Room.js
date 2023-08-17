@@ -7,7 +7,28 @@ export default function Room({ data, session }) {
   const [result, setResult] = useState([]); // 결과 데이터 상태
   const itemsPerPage = 7; // 페이지 당 표시되는 항목 수
   const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
-  const [searchOption, setSearchOption] = useState("board"); // 검색 옵션 상태 (기본값: "board")
+  const [searchOption, setSearchOption] = useState("title"); // 검색 옵션 상태
+  const [myRoomToggled, setMyRoomToggled] = useState(false); // 내 리딩룸 토글 상태
+
+  // 내가 속한 리딩룸 기능을 구현하는 함수
+  const myRoom = () => {
+    if (!session) {
+      window.confirm("로그인 후 이용해주세요");
+      return;
+    }
+
+    if (!myRoomToggled) {
+      const myRooms = data.filter((item) => {
+        return item.participants.includes(session.user.name);
+      });
+
+      setResult(myRooms);
+      setMyRoomToggled(true);
+    } else {
+      setResult(data);
+      setMyRoomToggled(false);
+    }
+  };
 
   // 검색 값이 변경될 때 상태를 업데이트하는 이벤트 핸들러
   const handleSearchOptionChange = (event) => {
@@ -94,7 +115,7 @@ export default function Room({ data, session }) {
             return (
               <>
                 <div className="mates-board-num">
-                  <h4>{item.index}</h4>
+                  <h4>{indexOfFirstItem + index + 1}</h4>
                 </div>
                 <div className="mates-board-name">
                   <h4>{item.roomTitle}</h4>
@@ -187,6 +208,9 @@ export default function Room({ data, session }) {
           <h4>오프라인: 165명</h4>
         </div>
         <div className="mates-open-btn-container">
+          <button className="mates-open-btn" onClick={myRoom}>
+            내 리딩룸
+          </button>
           <Link href="/makeRoom">
             <button className="mates-open-btn">방 만들기</button>
           </Link>

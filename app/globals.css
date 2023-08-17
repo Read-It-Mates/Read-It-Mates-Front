@@ -789,6 +789,8 @@ input {
 
 .mates-open-btn-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .mates-open-btn {
@@ -798,10 +800,11 @@ input {
   border: 0px;
   padding: 10px;
   font-weight: bold;
+  margin-bottom: 4px;
 }
 
 .mates-open-btn:hover {
-  background-image: linear-gradient(135deg, #01050a 0%, #705642 100%);
+  background: #009999;
   cursor: pointer;
 }
 
@@ -1345,7 +1348,7 @@ input {
 }
 
 .search-image {
-  max-width: 65%;
+  max-width: 60%;
   height: auto;
   display: block;
   border-radius: 6px;
@@ -1368,13 +1371,22 @@ input {
   z-index: 100;
 }
 
+.sidebar2 {
+  position: fixed;
+  top: 50%;
+  left: 30px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
 .sidebar-button1 {
   background-color: #f1f1f1;
   border: none;
   margin-bottom: 10px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-image 0.3s;
 }
 
 .sidebar-button1:hover,
@@ -1389,7 +1401,7 @@ input {
   margin-bottom: 10px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-image 0.3s;
 }
 
 .sidebar-button2:hover,
@@ -1404,7 +1416,7 @@ input {
   margin-bottom: 10px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-image 0.3s;
 }
 
 .sidebar-button3:hover,
@@ -1419,7 +1431,7 @@ input {
   margin-bottom: 10px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-image 0.3s;
 }
 
 .sidebar-button4:hover,
@@ -1665,4 +1677,39 @@ input {
   font-size: 1.2rem;
   font-weight: bold;
   color: #777;
+}
+
+.mypage-container {
+  position: relative;
+  display: inline-block;
+}
+
+.mypage-dropdown {
+  display: none;
+  position: absolute;
+  color: #000;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  margin-top: 5px;
+  right: 0%;
+  margin-top: 0px;
+  white-space: nowrap;
+}
+
+.mypage-dropdown button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-image: linear-gradient(135deg, #d3d3d3 0%, #f5f5f5 100%);
+  color: #000;
+  display: block;
+  width: 100%;
+}
+
+.mypage-dropdown button:hover {
+  background-image: linear-gradient(135deg, #070700 0%, #303034 100%);
+  color: #fff;
+}
+
+.mypage-container:hover .mypage-dropdown {
+  display: block; /* 마우스 올렸을 때 드롭다운이 표시되도록 설정 */
 }

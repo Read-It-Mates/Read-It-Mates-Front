@@ -23,6 +23,7 @@ export default function Search() {
       router.push(
         `/searchPage?title=${bookTitle}&author=${selectedAuthor}&category=${selectedCategory}&image=${selectedImage}&intro=${selectedIntro}`
       );
+
       setIsMoving(false);
     }
   }, [
