@@ -22,17 +22,11 @@ export default function Room({ data, session }) {
   const [selectedCategory, setSelectedCategory] = useState(data.category);
   const [selectedImageUrl, setSelectedImageUrl] = useState(data.image);
   const [focused, setFocused] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   const [socket, setSocket] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
-  const [enterRoom, setEnterRoom] = useState("test");
   const [loadChat, setLoadChat] = useState([]);
-
   const [userHost, setUserHost] = useState(data.participants[0]);
-  const [userListCheck, setUserListCheck] = useState([]);
   const [enterUserList, setEnterUserList] = useState([]);
 
   const idPost = {
@@ -427,7 +421,7 @@ export default function Room({ data, session }) {
       // setUserHost(item);
 
       // 새로고침
-      // router.refresh();
+      router.refresh();
     }
   }
 
@@ -532,11 +526,8 @@ export default function Room({ data, session }) {
   //   }
   // }
 
-  // 창 높이
-  const height = window.innerHeight;
-
   return (
-    <div style={{ height: height }} className="readingRoom">
+    <div className="readingRoom">
       <div
         className="chatSpace"
         style={{ width: sidebarHidden ? "98.5%" : "80%" }}
@@ -556,12 +547,10 @@ export default function Room({ data, session }) {
               <li
                 key={index}
                 className={
-                  userHost !== session.user.name
-                    ? "chatMessage"
-                    : "chatMessage2"
+                  userHost !== my.userNick ? "chatMessage" : "chatMessage2"
                 }
               >
-                {userHost !== session.user.name ? (
+                {userHost !== my.userNick ? (
                   <>
                     <div className="nickBubble">{my.userNick}</div>
                     <div className="messageBubble">{my.userChat}</div>

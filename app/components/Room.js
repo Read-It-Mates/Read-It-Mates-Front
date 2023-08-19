@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 
 export default function Room({ data, session }) {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
@@ -98,16 +99,95 @@ export default function Room({ data, session }) {
     }
   };
 
+  // 리딩룸 랜덤함수
+  const [recommendedRoom, setRecommendedRoom] = useState(null);
+
+  useEffect(() => {
+    const shuffledRooms = data.slice().sort(() => Math.random() - 0.5);
+    setRecommendedRoom(shuffledRooms[0]);
+  }, [data]);
+
+  // 정렬 상태
+  const [numSortState, setNumSortState] = useState(false);
+  const [roomSortState, setRoomSortState] = useState(false);
+  const [bookSortState, setBookSortState] = useState(false);
+  const [genreSortState, setGenreSortState] = useState(false);
+  const [peopleSortState, setPeopleSortState] = useState(false);
+
+  // 방 제목 정렬 함수
+  const roomSort = () => {
+    const sortedResult = !roomSortState
+      ? data.slice().sort((a, b) => a.roomTitle.localeCompare(b.roomTitle))
+      : data.slice().sort((a, b) => b.roomTitle.localeCompare(a.roomTitle));
+
+    setResult(sortedResult);
+    setRoomSortState(!roomSortState);
+  };
+
+  // 책 제목 정렬 함수
+  const bookSort = () => {
+    const sortedResult = !bookSortState
+      ? data.slice().sort((a, b) => a.bookTitle.localeCompare(b.bookTitle))
+      : data.slice().sort((a, b) => b.bookTitle.localeCompare(a.bookTitle));
+
+    setResult(sortedResult);
+    setBookSortState(!bookSortState);
+  };
+
+  // 장르 정렬 함수
+  const genreSort = () => {
+    const sortedResult = !genreSortState
+      ? data.slice().sort((a, b) => a.category.localeCompare(b.category))
+      : data.slice().sort((a, b) => b.category.localeCompare(a.category));
+
+    setResult(sortedResult);
+    setGenreSortState(!genreSortState);
+  };
+
+  // 참여자 정렬 함수
+  const peopleSort = () => {
+    const sortedResult = !peopleSortState
+      ? data
+          .slice()
+          .sort((a, b) => a.participants.length - b.participants.length)
+      : data
+          .slice()
+          .sort((a, b) => b.participants.length - a.participants.length);
+
+    setResult(sortedResult);
+    setPeopleSortState(!peopleSortState);
+  };
+
   return (
     // 리딩룸 게시판
     <div className="mates-container">
       <div className="mates-board-container">
         <div className="mates-board">
           <div className="mates-board-column">번호</div>
-          <div className="mates-board-column">방 제목</div>
-          <div className="mates-board-column">책 제목</div>
-          <div className="mates-board-column">장르</div>
-          <div className="mates-board-column">인원</div>
+          <div className="mates-board-column">
+            방 제목&nbsp;
+            <span className="sortBtn" onClick={roomSort}>
+              {roomSortState ? <TiArrowSortedDown /> : <TiArrowSortedUp />}
+            </span>
+          </div>
+          <div className="mates-board-column">
+            책 제목&nbsp;
+            <span className="sortBtn" onClick={bookSort}>
+              {bookSortState ? <TiArrowSortedDown /> : <TiArrowSortedUp />}
+            </span>
+          </div>
+          <div className="mates-board-column">
+            장르&nbsp;
+            <span className="sortBtn" onClick={genreSort}>
+              {genreSortState ? <TiArrowSortedDown /> : <TiArrowSortedUp />}
+            </span>
+          </div>
+          <div className="mates-board-column">
+            참여자&nbsp;
+            <span className="sortBtn" onClick={peopleSort}>
+              {peopleSortState ? <TiArrowSortedDown /> : <TiArrowSortedUp />}
+            </span>
+          </div>
           <div className="mates-board-btn">
             <div className="mates-board-column2">참여하기</div>
           </div>
@@ -127,7 +207,7 @@ export default function Room({ data, session }) {
                   <h4>{item.category}</h4>
                 </div>
                 <div className="mates-board-number">
-                  <h4>0/{item.participants.length}</h4>
+                  <h4>{item.participants.length}명</h4>
                 </div>
                 <div
                   className="mates-board-btn"
@@ -203,9 +283,17 @@ export default function Room({ data, session }) {
       </div>
       <div className="mates-number-container">
         <div className="mates-number">
-          <h4>전체: 357명</h4>
-          <h4>온라인: 192명</h4>
-          <h4>오프라인: 165명</h4>
+          {recommendedRoom && (
+            <>
+              <h3>추천 도서</h3>
+              <h4>{recommendedRoom.bookTitle}</h4>
+              <img
+                className="coverImage5"
+                src={recommendedRoom.image}
+                alt=""
+              ></img>
+            </>
+          )}
         </div>
         <div className="mates-open-btn-container">
           <button className="mates-open-btn" onClick={myRoom}>

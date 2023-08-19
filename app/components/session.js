@@ -9,12 +9,6 @@ export default async function Session() {
   return (
     <div className="navbar-r">
       <Log session={session} />
-
-      {session != null ? (
-        <div class="mypage-container">
-          <button class="user-name">{session.user.name}</button>
-        </div>
-      ) : null}
     </div>
   );
 }
