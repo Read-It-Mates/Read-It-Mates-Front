@@ -43,10 +43,18 @@ export default function Room({ data, session }) {
   const onDelete = async () => {
     const deleteRoom = window.confirm("방을 삭제하시겠습니까?");
     if (deleteRoom) {
+      // 방장이 리딩룸을 삭제할 때, 서버 소켓에 리딩룸이 삭제된다는 것을 알려준다.
+      const socketJson = {
+        deletedRoom: data._id,
+      };
+      socket.send(JSON.stringify(socketJson));
+
       await fetch("/api/post/roomDelete", {
         method: "POST",
         body: JSON.stringify(idPost),
       });
+
+      // 홈으로 이동
       router.push("/");
     }
   };
@@ -112,7 +120,9 @@ export default function Room({ data, session }) {
   // 값이 변경될 때마다 콘솔에 출력하여 확인
   useEffect(() => {
     console.log("enterUserList 변경됨: ", enterUserList);
-  }, [enterUserList]);
+    console.log("data.participants 변경됨: " + data.participants);
+    console.log("userHost 변경됨 " + userHost);
+  }, [enterUserList, data.participants, userHost]);
 
   // [ socket 통신 부분 ]
   useEffect(() => {
@@ -149,7 +159,9 @@ export default function Room({ data, session }) {
 
       // 자신을 참가자 목록에 추가
       if (!enterUserList.includes(session.user.name)) {
-        console.log("enterUserList 추가함111111");
+        console.log(
+          "enterUserList 에 " + session.user.name + " 님을 추가합니다."
+        );
         setEnterUserList([...enterUserList, session.user.name]);
       }
 
@@ -177,7 +189,9 @@ export default function Room({ data, session }) {
         if (enterUserNick !== session.user.name) {
           if (!enterUserList.includes(enterUserNick)) {
             // 상대방의 닉네임을 참여자 목록에 추가
-            console.log("enterUserList 추가함11111");
+            console.log(
+              "enterUserList 에 " + enterUserNick + " 님을 추가합니다."
+            );
             setEnterUserList((prevEnterUserList) => [
               ...prevEnterUserList,
               enterUserNick,
@@ -189,6 +203,9 @@ export default function Room({ data, session }) {
             enterUser: session.user.name,
           };
           socket.send(JSON.stringify(connectUser));
+
+          // 새로고침
+          router.refresh();
         }
 
         // 이미 들어온 사람과의 연결 확인을 위한 수신
@@ -199,26 +216,46 @@ export default function Room({ data, session }) {
         // 이 메시지를 보낸 사람이 본인이 아니라면..
         if (enterUser !== session.user.name) {
           console.log("[enterUser] 연결된 닉네임: " + enterUser);
+
           if (!enterUserList.includes(enterUser)) {
-            console.log("enterUserList 추가함222222");
+            console.log(
+              "enterUserList 에 " + enterUser + " 님을 추가했습니다."
+            );
             setEnterUserList((prevEnterUserList) => [
               ...prevEnterUserList,
               enterUser,
             ]);
           }
 
+          // 새로고침
+          router.refresh();
+
           // setUserListCheck((prevUser) => [...prevUser, message.reCheck]);
         }
+      } else if (message.hasOwnProperty("offUser")) {
+        // 방을 벗어난 닉네임(offline)
+        const offUser = message.offUser;
+        console.log("[offUser] 방을 벗어난 유저 닉네임: " + offUser);
 
-        // 방금 방을 벗어난 닉네임
+        // 페이지를 벗어날 때, 참여자 목록에서 삭제
+        setEnterUserList((prevEnterUserList) =>
+          prevEnterUserList.filter((user) => user !== offUser)
+        );
+
+        // html에 변화가 생길 시, 새로고침
+        router.refresh();
       } else if (message.hasOwnProperty("leaveUser")) {
+        // 방을 완전히 나간 닉네임
         const leaveUser = message.leaveUser;
-        console.log("[leaveUser] 방을 벗어난 유저 닉네임: " + leaveUser);
+        console.log("[leaveUser] 방을 완전히 나간 유저 닉네임: " + leaveUser);
 
         // 페이지를 벗어날 때, 참여자 목록에서 삭제
         setEnterUserList((prevEnterUserList) =>
           prevEnterUserList.filter((user) => user !== leaveUser)
         );
+
+        // html에 변화가 생길 시, 새로고침
+        router.refresh();
 
         // 강퇴 처리
       } else if (message.hasOwnProperty("kickNick")) {
@@ -227,8 +264,6 @@ export default function Room({ data, session }) {
 
         // 강퇴 닉네임과 자신의 닉네임과 같다면..
         if (kickNick === session.user.name) {
-          //보석아...강퇴 전에 알람창 띄우는 건 실패했다....부탁한다...!!
-          // window.confirm("강퇴당했습니다. 깨끗한 채팅 생활을 만들어요~")
           window.alert("강퇴당했습니다. 깨끗한 채팅 생활을 만들어요~");
 
           // 강퇴 알람을 받았다면, 소켓 종료 및 홈으로 이동
@@ -246,14 +281,30 @@ export default function Room({ data, session }) {
             // 홈으로 보내기
             router.push("/");
           }
-
-          // 강퇴 당한 대상 외의 사람들이 받게 될 console.log
         } else {
+          // 강퇴 당한 대상 외의 사람들이 받게 될 console.log
           console.log("[kickNick] 강퇴당한 닉네임 : " + kickNick);
           // 참여자 목록에서 강퇴당한 닉네임 삭제
           setEnterUserList((prevEnterUserList) =>
             prevEnterUserList.filter((user) => user !== kickNick)
           );
+        }
+      } else if (message.hasOwnProperty("leaderNick")) {
+        // 방장 위임 받은 닉네임
+        const leaderNick = message.leaderNick;
+        console.log(leaderNick + " 님이 방장 위임 되셨습니다.");
+
+        setUserHost(leaderNick);
+
+        // 새로고침
+        router.refresh();
+      } else if (message.hasOwnProperty("deletedRoom")) {
+        if (session.user.name !== userHost) {
+          // 방장이 방을 삭제하고 나갔을 때
+          window.alert("방장이 방을 폭파하였습니다.");
+
+          // 홈으로 이동
+          router.push("/");
         }
       } else {
         // 소켓에서 보낸 메시지를 채팅에 추가
@@ -266,13 +317,16 @@ export default function Room({ data, session }) {
     // [eventListener] 사용자가 탭을 닫거나 다른 페이지로 이동할 때(unload) 반응
     window.addEventListener("beforeunload", () => {
       // 페이지를 벗어날 때, 서버 소켓에 사용자의 상태를 서버에 알립니다.
-      const leaveCheck = {
-        leaveUser: session.user.name,
+      const offUser = {
+        offUser: session.user.name,
       };
-      socket.send(JSON.stringify(leaveCheck));
+      socket.send(JSON.stringify(offUser));
 
       // 내용 전송 후, 소켓 연결 종료
       socket.close();
+
+      // 홈으로 보내기
+      router.push("/");
     });
 
     // WebSocket 연결이 종료될 때 수행할 작업을 추가합니다.
@@ -345,18 +399,21 @@ export default function Room({ data, session }) {
         method: "POST",
         body: JSON.stringify({ _id: data._id, userName: item }),
       });
+      // html에 변화가 생길 시, 새로고침
       router.refresh();
     }
   }
 
   // 위임
   async function leader(item) {
-    const confirmed = window.confirm(`"${item}"님을(를) 위임하시겠습니까?`);
+    const confirmed = window.confirm(
+      `"${item}"님을(를) 방장으로 위임하시겠습니까?`
+    );
     console.log(`Leader button clicked for ${item}`);
     // Leader 버튼 클릭 시 수행할 작업
     if (confirmed) {
       console.log(`"${item}"을(를) 위임합니다.`);
-      // 강퇴 수행할 작업
+      // 위임 수행할 작업
       const socketJson = {
         leaderNick: item,
       };
@@ -367,8 +424,10 @@ export default function Room({ data, session }) {
         method: "POST",
         body: JSON.stringify({ _id: data._id, userName: item }),
       });
-      setUserHost(item);
-      router.refresh();
+      // setUserHost(item);
+
+      // 새로고침
+      // router.refresh();
     }
   }
 
@@ -404,23 +463,64 @@ export default function Room({ data, session }) {
   // 1. 방을 나간 순간, DB 에서 해당 닉네임을 갖는 정보를 삭제
   // 2. data 에 변화가 생기면 방에 있는 다른 사람에게 알리거나, 목록화면 다시 랜더링
   async function exitRoom() {
-    const confirmed = window.confirm("정말로 방을 나가시겠습니까?");
+    const confirmed = window.confirm(
+      session.user.name + "님, 정말로 방을 나가시겠습니까?"
+    );
     if (confirmed) {
-      // 강퇴 수행할 작업
-      const socketJson = {
-        kickNick: session.user.name,
-      };
-      socket.send(JSON.stringify(socketJson));
+      // 만약 나간 사람이 방장이라면...
+      if (session.user.name === userHost) {
+        const socketJson = {
+          leaderNick: data.participants[1],
+        };
+        socket.send(JSON.stringify(socketJson));
 
-      // 서버를 통해 삭제할 값을 넘김
-      await fetch("/api/post/userLeave", {
-        // API 엔드포인트를 호출하여 사용자가 나간 정보를 백엔드에 알립니다.
-        method: "POST",
-        body: JSON.stringify({ _id: data._id, userName: session.user.name }),
-        headers: { "Content-Type": "application/json" },
-      });
+        // 서버를 통해 위임할 값을 넘김
+        await fetch("/api/post/userLeader", {
+          method: "POST",
+          body: JSON.stringify({
+            _id: data._id,
+            userName: data.participants[1],
+          }),
+        });
 
-      router.push("/");
+        // 페이지를 벗어날 때, 서버 소켓에 사용자의 상태를 서버에 알립니다.
+        const leaveCheck = {
+          leaveUser: session.user.name,
+        };
+        socket.send(JSON.stringify(leaveCheck));
+
+        // 내용 전송 후, 소켓 연결 종료
+        socket.close();
+
+        await fetch("/api/post/userLeave", {
+          // API 엔드포인트를 호출하여 사용자가 나간 정보를 백엔드에 알립니다.
+          method: "POST",
+          body: JSON.stringify({ _id: data._id, userName: session.user.name }),
+          // headers: { "Content-Type": "application/json" },
+        });
+
+        // 홈으로 이동하기
+        router.push("/");
+      } else {
+        // 페이지를 벗어날 때, 서버 소켓에 사용자의 상태를 서버에 알립니다.
+        const leaveCheck = {
+          leaveUser: session.user.name,
+        };
+        socket.send(JSON.stringify(leaveCheck));
+
+        // 내용 전송 후, 소켓 연결 종료
+        socket.close();
+
+        await fetch("/api/post/userLeave", {
+          // API 엔드포인트를 호출하여 사용자가 나간 정보를 백엔드에 알립니다.
+          method: "POST",
+          body: JSON.stringify({ _id: data._id, userName: session.user.name }),
+          // headers: { "Content-Type": "application/json" },
+        });
+
+        // 홈으로 이동하기
+        router.push("/");
+      }
     }
   }
 
@@ -479,10 +579,10 @@ export default function Room({ data, session }) {
             <li
               key={index}
               className={
-                userHost !== session.user.name ? "chatMessage" : "chatMessage2"
+                userHost !== msg.userNick ? "chatMessage" : "chatMessage2"
               }
             >
-              {userHost !== session.user.name ? (
+              {userHost !== msg.userNick ? (
                 <>
                   <div className="nickBubble">{msg.userNick}</div>
                   <div className="messageBubble">{msg.userChat}</div>
