@@ -286,7 +286,7 @@ export default function Room({ data, session }) {
           {recommendedRoom && (
             <>
               <h3>추천 도서</h3>
-              <h4>{recommendedRoom.bookTitle}</h4>
+              <h4 style={{ padding: "8px" }}>{recommendedRoom.bookTitle}</h4>
               <img
                 className="coverImage5"
                 src={recommendedRoom.image}

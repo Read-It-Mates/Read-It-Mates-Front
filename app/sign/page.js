@@ -61,8 +61,10 @@ export default function Sign() {
             placeholder="닉네임 입력"
             onChange={onChangeInput}
           ></input>
-          {!validity.name && (
+          {!validity.name ? (
             <div className="error">닉네임 형식이 맞지 않습니다.</div>
+          ) : !formValues.name ? null : (
+            <div className="noError">사용 가능한 닉네임입니다.</div>
           )}
 
           <input
@@ -71,8 +73,10 @@ export default function Sign() {
             placeholder="이메일 입력"
             onChange={onChangeInput}
           ></input>
-          {!validity.email && (
+          {!validity.email ? (
             <div className="error">이메일 형식이 맞지 않습니다.</div>
+          ) : !formValues.email ? null : (
+            <div className="noError">사용 가능한 이메일입니다.</div>
           )}
 
           <input
@@ -82,12 +86,15 @@ export default function Sign() {
             placeholder="패스워드 입력"
             onChange={onChangeInput}
           ></input>
-          {!validity.pw && (
-            <div className="error">
-              패스워드 형식이 맞지 않습니다.(최소 6자 이상)
-            </div>
+          {!validity.pw || formValues.pw.length < 6 ? (
+            !formValues.pw ? null : (
+              <div className="error">
+                패스워드 형식이 맞지 않습니다.(최소 6자 이상)
+              </div>
+            )
+          ) : (
+            <div className="noError">사용 가능한 패스워드입니다.</div>
           )}
-
           <input
             className={inputClassName(validity.pw2)}
             type="password"
@@ -95,8 +102,10 @@ export default function Sign() {
             placeholder="패스워드 재입력"
             onChange={onChangeInput}
           ></input>
-          {!validity.pw2 && (
-            <div className="error">패스워드가 일치하지 않습니다.</div>
+          {!validity.pw2 ? (
+            <div className="error">패스워드 일치하지 않습니다.</div>
+          ) : !formValues.pw2 ? null : (
+            <div className="noError">패스워드가 일치합니다.</div>
           )}
 
           <button className="submitButton2" type="submit">

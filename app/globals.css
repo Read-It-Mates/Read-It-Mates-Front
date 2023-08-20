@@ -425,6 +425,7 @@ input {
   justify-content: space-around;
   height: 40px;
   color: #f1f1f1;
+  margin-right: 150px;
 }
 
 @keyframes scalion {
@@ -479,6 +480,7 @@ input {
   animation: 0s linear infinite;
   justify-content: center;
   align-items: center;
+  margin-right: 150px;
 }
 
 .navbar1-icon:hover {
@@ -995,6 +997,7 @@ input {
   background-image: linear-gradient(135deg, #070700 0%, #303034 100%);
   color: #000;
   height: 100vh;
+  font-size: large;
 }
 
 .room-sidebar {
@@ -1003,6 +1006,7 @@ input {
   padding-inline: 20px;
   background-color: #f0f0f0;
   position: relative;
+  overflow-y: auto;
 }
 
 .room-sidebar2 {
@@ -1033,29 +1037,48 @@ input {
   cursor: pointer;
 }
 
+.screenSpace {
+  height: 100%;
+  background-color: #000;
+  border-right: 1px solid gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: width 0.3s;
+}
+
 .chatSpace {
-  width: 80%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  width: 30%;
+  overflow-y: auto;
+  position: relative;
 }
 
 .chatList {
   flex: 1;
-  padding: 10px;
-  overflow-y: auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  position: relative;
 }
 
 .chatMessage {
-  display: flex;
-  justify-content: flex-end;
   margin-bottom: 10px;
+  flex-direction: column;
+  display: flex;
+  align-items: end;
 }
 
 .chatMessage2 {
-  display: flex;
-  justify-content: flex-start;
   margin-bottom: 10px;
+  flex-direction: column;
+  display: flex;
+  align-items: start;
 }
 
 .chatMessage .messageBubble {
@@ -1078,14 +1101,17 @@ input {
 
 .nickBubble {
   color: #fff;
-  margin-inline: 6px;
+  margin: 6px;
 }
 
 .messageForm {
   display: flex;
-  padding: 10px;
+  padding-block: 10px;
   background-color: #fff;
   border-top: 1px solid #ccc;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
 }
 
 .messageInput {
@@ -1145,7 +1171,7 @@ input {
 .fullScreenButton {
   position: relative;
   background-color: #000;
-  border: none;
+  border-color: white;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -1155,7 +1181,7 @@ input {
   font-size: 24px;
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: color 0.2s ease-in-out;
 }
 
@@ -1163,12 +1189,16 @@ input {
   display: flex;
   align-items: center;
   justify-content: end;
-  margin: 4px;
+  /* margin: 4px; */
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .fullScreenButton:hover {
   color: #000;
   background: #fff;
+  border-color: black;
 }
 
 .bookInfo {
@@ -1179,6 +1209,7 @@ input {
   width: 70%;
   margin: 20px auto;
   padding: auto;
+  position: relative;
 }
 
 .small-Category {
@@ -1303,8 +1334,20 @@ input {
   margin-bottom: 10px;
 }
 
+.noError {
+  color: green;
+  font-size: 0.8em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
 .room-Leader {
   color: red;
+  font-weight: bold;
+}
+
+.room-Leader2 {
+  color: chocolate;
   font-weight: bold;
 }
 
@@ -1359,7 +1402,7 @@ input {
 }
 
 .search-image {
-  max-width: 60%;
+  max-width: 50%;
   height: auto;
   display: block;
   border-radius: 6px;
@@ -1623,9 +1666,17 @@ input {
   color: #333;
   margin-bottom: 20px;
 }
+.comment-section2 {
+  position: relative;
+  margin-top: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
 
 .comment-input {
-  width: 100%;
+  width: 95%;
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
@@ -1653,9 +1704,6 @@ input {
 
 .comment-list {
   list-style-type: none;
-  margin-top: 20px;
-  max-height: 75vh;
-  overflow-y: auto;
 }
 
 .comment-list .comment {
@@ -1663,16 +1711,20 @@ input {
   margin-bottom: 10px;
   background-color: #d9d9d9e6;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  justify-content: center;
 }
 
 .comment-author {
   font-weight: bold;
-  font-size: 14px;
+  /* font-size: 14px; */
   color: #333;
 }
 
 .comment-text {
-  font-size: 14px;
+  font-size: 18px;
   color: #666;
   margin-top: 5px;
 }

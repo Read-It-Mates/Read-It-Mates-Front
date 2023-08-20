@@ -98,7 +98,11 @@ export default function Review({ session }) {
   const scrollRef = useRef(null);
 
   if (!title) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-container">
+        <h4 className="loading-text">loading...</h4>
+      </div>
+    );
   }
 
   return (
@@ -117,7 +121,7 @@ export default function Review({ session }) {
         <div>
           <h2 className="comments-title">리뷰 남기기</h2>
         </div>
-        <div>
+        <div className="comment-section2">
           <ul className="comment-list" ref={scrollRef}>
             {result.length === 0 && comments.length === 0 ? ( // 불러온 리뷰 데이터와 실시간 리뷰 데이터가 모두 없는 경우
               <div className="no-review-container">
@@ -132,7 +136,7 @@ export default function Review({ session }) {
                   <li key={index}>
                     {comment.author.map((author, i) => (
                       <div className="comment" key={i}>
-                        <p className="comment-author">{author}</p>
+                        <p className="comment-author">{author}:</p>
                         <p className="comment-text">{comment.text[i]}</p>
                       </div>
                     ))}
@@ -150,7 +154,6 @@ export default function Review({ session }) {
               </>
             )}
           </ul>
-
           <input
             className="comment-input"
             placeholder="여기에 리뷰를 남겨주세요..."

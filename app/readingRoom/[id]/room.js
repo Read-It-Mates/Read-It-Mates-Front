@@ -1,7 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TbDirectionHorizontal } from "react-icons/tb";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
+import { TbScreenShare, TbScreenShareOff } from "react-icons/tb";
 import { GrFormClose } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import SockJS from "sockjs-client";
@@ -23,15 +24,47 @@ export default function Room({ data, session }) {
   const [selectedImageUrl, setSelectedImageUrl] = useState(data.image);
   const [focused, setFocused] = useState(false);
   const router = useRouter();
+  const [screenStream, setScreenStream] = useState(null); //화면 공유 스트림
+  const [screenShare, setScreenShare] = useState(false); //화면 공유 상태
 
   const [socket, setSocket] = useState(null);
   const [loadChat, setLoadChat] = useState([]);
   const [userHost, setUserHost] = useState(data.participants[0]);
   const [enterUserList, setEnterUserList] = useState([]);
 
+  // 스크롤 바 ref
+  const scrollRef = useRef(null);
+
   const idPost = {
     _id: data._id,
   };
+
+  // 화면 공유 함수
+  const toggleShareScreen = async () => {
+    if (screenShare == false) {
+      navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
+        setScreenStream(stream);
+        stream.getVideoTracks()[0];
+        setScreenShare(true);
+      });
+    } else {
+      screenStream.getVideoTracks()[0].stop();
+      setScreenStream(null);
+      setScreenShare(false);
+    }
+  };
+
+  // 공유 스트림 연결
+  useEffect(() => {
+    const videoElement = document.getElementById("shared-screen");
+
+    if (screenStream && videoElement) {
+      videoElement.srcObject = screenStream;
+    } else if (!screenStream && videoElement) {
+      videoElement.removeAttribute("src");
+      videoElement.removeAttribute("srcObject");
+    }
+  }, [screenStream]);
 
   // 리딩룸 삭제 함수
   const onDelete = async () => {
@@ -370,7 +403,8 @@ export default function Room({ data, session }) {
           userChat: message,
         };
         socket.send(JSON.stringify(socketJson));
-        setInputMessage();
+        // setInputMessage();
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       }
     }
   };
@@ -440,7 +474,12 @@ export default function Room({ data, session }) {
 
   // 전체화면 및 축소화면 변경 함수
   const toggleFullScreen = () => {
-    const readingRoomDiv = document.querySelector(".readingRoom");
+    let readingRoomDiv = "";
+    if (screenShare == true) {
+      readingRoomDiv = document.querySelector(".screenSpace");
+    } else {
+      readingRoomDiv = document.querySelector(".readingRoom");
+    }
 
     if (!document.fullscreenElement) {
       readingRoomDiv.requestFullscreen().catch(console.error);
@@ -528,11 +567,31 @@ export default function Room({ data, session }) {
 
   return (
     <div className="readingRoom">
+      {screenStream ? (
+        <div className="screenSpace" style={{ width: "70%" }}>
+          <video
+            id="shared-screen"
+            style={
+              !isFullScreen
+                ? { width: "200%", height: "100%" }
+                : { width: "100%", height: "150%" }
+            }
+            autoPlay
+            muted
+            playsInline
+          ></video>
+        </div>
+      ) : null}
       <div
+        style={
+          screenStream
+            ? { width: sidebarHidden ? "30%" : "30%" }
+            : { width: sidebarHidden ? "100%" : "80%" }
+        }
         className="chatSpace"
-        style={{ width: sidebarHidden ? "98.5%" : "80%" }}
       >
         <div className="fullScreenButton-container">
+          {/* 전체화면 버튼튼 */}
           <button onClick={toggleFullScreen} className="fullScreenButton">
             {isFullScreen ? (
               <AiOutlineFullscreen size={"2rem"} />
@@ -540,8 +599,16 @@ export default function Room({ data, session }) {
               <AiOutlineFullscreenExit size={"2rem"} />
             )}
           </button>
+          {/* 화면 공유 버튼 */}
+          <button onClick={toggleShareScreen} className="fullScreenButton">
+            {!screenStream ? (
+              <TbScreenShare size={"2rem"} />
+            ) : (
+              <TbScreenShareOff size={"2rem"} />
+            )}
+          </button>
         </div>
-        <ul className="chatList">
+        <ul className="chatList" ref={scrollRef}>
           {loadChat.map((my, index) => {
             return (
               <li
@@ -557,8 +624,11 @@ export default function Room({ data, session }) {
                   </>
                 ) : (
                   <>
+                    <div className="nickBubble">
+                      {my.userNick}&nbsp;
+                      <span className="room-Leader2">(방장) </span>
+                    </div>
                     <div className="messageBubble">{my.userChat}</div>
-                    <div className="nickBubble">{my.userNick}</div>
                   </>
                 )}
               </li>
@@ -578,8 +648,11 @@ export default function Room({ data, session }) {
                 </>
               ) : (
                 <>
+                  <div className="nickBubble">
+                    {msg.userNick}&nbsp;
+                    <span className="room-Leader2">(방장)</span>
+                  </div>
                   <div className="messageBubble">{msg.userChat}</div>
-                  <div className="nickBubble">{msg.userNick}</div>
                 </>
               )}
             </li>
@@ -763,7 +836,7 @@ export default function Room({ data, session }) {
                     className="participant"
                     style={{ width: "fit-content" }}
                   >
-                    {isOnline ? (
+                    {!isOnline ? (
                       <div>
                         {item}&nbsp;
                         <span className="room-Leader">방장 </span>

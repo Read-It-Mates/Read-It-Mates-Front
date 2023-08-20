@@ -15,6 +15,7 @@ export default function Session({ session }) {
         <button
           className="user-name"
           onClick={() => {
+            router.push("/");
             signOut();
           }}
         >
