@@ -836,7 +836,7 @@ export default function Room({ data, session }) {
                     className="participant"
                     style={{ width: "fit-content" }}
                   >
-                    {!isOnline ? (
+                    {isOnline ? (
                       <div>
                         {item}&nbsp;
                         <span className="room-Leader">방장 </span>
